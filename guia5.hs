@@ -566,9 +566,14 @@ sacarBlancosRepetidos (x:y:ys)
 -}
 contarPalabras :: [Char] -> Integer
 contarPalabras [] = 0
-contarPalabras [x] = 1
-contarPalabras xs = 0
+contarPalabras xs = 1 + contarEspacios (quitarEspaciosEnExtremos (sacarBlancosRepetidos xs))
 
+
+contarEspacios :: [Char] -> Integer
+contarEspacios [] = 0
+contarEspacios (x:xs) 
+    | x == ' ' = 1 + contarEspacios xs
+    | otherwise = contarEspacios xs 
 
 testear :: [Char] -> [Char]
 testear [] = []
@@ -590,4 +595,5 @@ quitarEspaciosEnExtremos (x:xs)
 quitarUltimo :: [Char] -> [Char]
 quitarUltimo [] = []
 quitarUltimo [x] = []
-quitarUltimo (x:xs) = x: quitarUltimo xs
+quitarUltimo (x:xs) = x : quitarUltimo xs
+
