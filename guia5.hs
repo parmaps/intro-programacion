@@ -1,3 +1,4 @@
+import Distribution.Simple.Utils (xargs)
 -------------
 --Ejercicio 1
 -------------
@@ -540,3 +541,53 @@ procesarLista (x:xs) listaOrdenada = procesarLista (quitar (minimo (x:xs)) (x:xs
     -- | otherwise = ordenar (quitar (minimo xs) xs)
 
 
+
+--------------------------------------------------------------------------
+--Ejercicio 4: Definir las siguientes funciones sobre listas de caracteres, 
+-- interpretando una palabra como una secuencia de caracteres sin blancos
+--------------------------------------------------------------------------
+{-
+4.1) sacarBlancosRepetidos :: [Char] -> [Char], que reemplaza cada subsecuencia de blancos contiguos de la primera
+lista por un solo blanco en la lista resultado.
+-}
+
+sacarBlancosRepetidos :: [Char] -> [Char]
+sacarBlancosRepetidos [] = []
+sacarBlancosRepetidos [x] = [x]
+sacarBlancosRepetidos (x:y:ys) 
+    | x == y && x == ' ' = sacarBlancosRepetidos (y:ys) -- si 1ro == 2do y es whitespace, volver a preguntar desde 2do (sacando primero)
+    | otherwise = x: sacarBlancosRepetidos (y:ys) --si no, mantene primero y volve a preguntar desde 2do
+
+
+{-
+4.2) contarPalabras :: [Char] -> Integer, que dada una lista de caracteres devuelve la cantidad de palabras que tiene.
+
+-> contar whitespaces
+-}
+contarPalabras :: [Char] -> Integer
+contarPalabras [] = 0
+contarPalabras [x] = 1
+contarPalabras xs = 0
+
+
+testear :: [Char] -> [Char]
+testear [] = []
+testear xs = quitarEspaciosEnExtremos (sacarBlancosRepetidos xs)
+    
+
+quitarEspaciosEnExtremos :: [Char] -> [Char]
+quitarEspaciosEnExtremos [] = []
+quitarEspaciosEnExtremos [x] 
+    | x == ' ' = []
+    | otherwise = [x]
+quitarEspaciosEnExtremos (x:xs)
+    | x == ' ' && last xs == ' ' = quitarUltimo xs
+    | x == ' ' = xs
+    | last xs == ' ' = quitarUltimo (x:xs)
+    | otherwise = x : xs
+
+
+quitarUltimo :: [Char] -> [Char]
+quitarUltimo [] = []
+quitarUltimo [x] = []
+quitarUltimo (x:xs) = x: quitarUltimo xs
