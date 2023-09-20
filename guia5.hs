@@ -597,3 +597,63 @@ quitarUltimo [] = []
 quitarUltimo [x] = []
 quitarUltimo (x:xs) = x : quitarUltimo xs
 
+
+{-
+4.3) palabras :: [Char] -> [[Char]], que dada una lista arma una nueva lista con las palabras de la lista original.
+
+-}
+
+palabras :: [Char] -> [[Char]]
+palabras xs = armarListaPalabras (quitarEspaciosEnExtremos (sacarBlancosRepetidos xs))
+
+
+primerPalabra :: [Char] -> [Char]
+primerPalabra [] = []
+primerPalabra [' '] = []
+primerPalabra [x] = [x]
+primerPalabra (x:' ':ys) = [x] -- si el segundo elemento es WS, devolve una lista con el primer elemento
+primerPalabra (x:y:ys) = x : primerPalabra (y:ys) --si hay al menos dos elementos, mantene el primero y pregunta el siguiente
+
+
+armarListaPalabras :: [Char] -> [[Char]]
+armarListaPalabras [] = []
+armarListaPalabras xs = primerPalabra xs : armarListaPalabras (sacarPrefijo (primerPalabra xs) xs)
+--en una nueva lista guardo la primera palabra, la saco de la lista original y repito (guardo la nueva primera, la saco, etc.)
+--como?
+--armar una nueva lista 
+--primer elemento: primer palabra de xs
+--resto: volver a aplicar funcion a la lista xs desde la segunda palabra (sin la primera palabra y el espacio)
+
+
+-- arg 1: prefijo a sacar, arg 2: frase original
+sacarPrefijo :: [Char] -> [Char] -> [Char]
+sacarPrefijo [] [] = []
+sacarPrefijo [] (y:ys) 
+    | y == ' ' = ys --remover primer caracter por ser vacio
+    | otherwise = y:ys --dejar palabra con primer caracter
+sacarPrefijo (x:xs) (y:ys) 
+    | x == y = sacarPrefijo xs ys --si coinciden los caracteres, removerlos de ambas y volver a preguntar
+    | y == ' ' = ys --si y es vacio, devolver el resto de la lista
+    | otherwise = y:ys --si no coinciden e y no es vacio, devolver la lista con y adelante
+
+
+
+palabraMasLarga :: [Char] -> [Char]
+palabraMasLarga [] = []
+palabraMasLarga [x] = [x]
+palabraMasLarga xs 
+    | longitud (primerPalabra xs) >= longitud (palabraMasLarga listaSinPrimerPalabra) = primerPalabra palabraLimpia --si el largo de la primer palabra es mayor al largo de todas las otras palabras, devolver la primer palabra
+    | otherwise = palabraMasLarga listaSinPrimerPalabra --si no, volver a preguntar desde la segunda palabra
+    where
+        palabraLimpia = quitarEspaciosEnExtremos (sacarBlancosRepetidos xs)
+        listaSinPrimerPalabra = sacarPrefijo (primerPalabra xs) xs
+
+
+-- palabraMasLarga "hola como andas" -> "andas"
+-- palabraMasLarga "hola como andas lince" -> "andas"
+-- palabraMasLarga "hola lince como andas" -> "lince"
+-- palabraMasLarga "hola como andas linceh" -> "linceh"
+-- palabraMasLarga "hola andas1 como andas2" -> "andas1"
+-- palabraMasLarga "hola subacuaticass como  andas lince de las praderas subacuaticas" -> "praderas"
+
+
