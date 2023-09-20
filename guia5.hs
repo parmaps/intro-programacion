@@ -637,7 +637,8 @@ sacarPrefijo (x:xs) (y:ys)
     | otherwise = y:ys --si no coinciden e y no es vacio, devolver la lista con y adelante
 
 
-
+------
+--4.4)
 palabraMasLarga :: [Char] -> [Char]
 palabraMasLarga [] = []
 palabraMasLarga [x] = [x]
@@ -648,12 +649,45 @@ palabraMasLarga xs
         palabraLimpia = quitarEspaciosEnExtremos (sacarBlancosRepetidos xs)
         listaSinPrimerPalabra = sacarPrefijo (primerPalabra xs) xs
 
-
 -- palabraMasLarga "hola como andas" -> "andas"
 -- palabraMasLarga "hola como andas lince" -> "andas"
 -- palabraMasLarga "hola lince como andas" -> "lince"
 -- palabraMasLarga "hola como andas linceh" -> "linceh"
 -- palabraMasLarga "hola andas1 como andas2" -> "andas1"
 -- palabraMasLarga "hola subacuaticass como  andas lince de las praderas subacuaticas" -> "praderas"
+------
 
+------
+--4.5)
+aplanar :: [[Char]] -> [Char]
+aplanar [] = []
+aplanar (x:xs) = x ++ aplanar xs
+-- aplanar ["hola"] = "hola"
+-- aplanar ["hola", "lince"] = "holalince"
+-- aplanar ["hola", "como" ,"andas", "lince"] = "holacomoandaslince"
+------
+
+--4.6) 
+aplanarConBlancos :: [[Char]] -> [Char]
+aplanarConBlancos [] = []
+aplanarConBlancos [x] = x
+aplanarConBlancos (x:xs) = x ++ " " ++ aplanarConBlancos xs
+-- aplanarConBlancos ["hola"] = "hola"
+-- aplanarConBlancos ["hola", "lince"] = "hola lince"
+-- aplanarConBlancos ["hola", "como" ,"andas", "lince"] = "hola como andas lince"
+------
+
+--4.7) 
+aplanarConNBlancos :: [[Char]] -> Integer -> [Char]
+aplanarConNBlancos [] _ = []
+aplanarConNBlancos [x] _ = x
+aplanarConNBlancos (x:xs) n = x ++ insertarNBlancos n ++ aplanarConNBlancos xs n
+-- aplanarConNBlancos ["hola"] 1 = "hola"
+-- aplanarConNBlancos ["hola", "lince"] 2 = "hola  lince"
+-- aplanarConNBlancos ["hola", "como" ,"andas", "lince"] 3 = "hola   como   andas   lince"
+
+insertarNBlancos :: Integer -> [Char]
+insertarNBlancos 0 = ""
+insertarNBlancos n = " " ++ insertarNBlancos (n-1)
+------
 
