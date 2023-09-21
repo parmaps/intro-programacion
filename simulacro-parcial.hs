@@ -27,10 +27,10 @@ par de elementos que las componen (sin importar el orden) son iguales
 
 relacionesValidas :: [(String, String)] -> Bool
 relacionesValidas [] = True
-relacionesValidas ((a,b):xs) 
+relacionesValidas ((a,b):rs) 
     | a == b = False
-    | pertenece (a,b) xs || pertenece (b,a) xs = False
-    | otherwise = relacionesValidas xs
+    | pertenece (a,b) rs || pertenece (b,a) rs = False
+    | otherwise = relacionesValidas rs
 
 
 
@@ -59,27 +59,53 @@ pertenece x (y:ys) = x == y || pertenece x ys
 
 personas ::  [(String, String)] -> [String]
 personas [] = []
-personas xs = personasAux (sacarDeTuplas xs) [] --llamo la funcion auxiliar de personas con una lista con todas las personas y otra lista vacia como argumentos
+personas rs = personasAux (personasRepetidas rs) [] --llamo la funcion auxiliar de personas con una lista con todas las personas y otra lista vacia como argumentos
 
-sacarDeTuplas ::  [(String, String)] -> [String]
-sacarDeTuplas [] = []
-sacarDeTuplas ((a,b):xs) = a:b:sacarDeTuplas xs
+personasRepetidas ::  [(String, String)] -> [String]
+personasRepetidas [] = []
+personasRepetidas ((p1,p2):rs) = p1 : p2 : personasRepetidas rs
 
 personasAux ::  [String] -> [String] -> [String]
 personasAux [] listaAux = [] 
-personasAux (x:xs) listaAux
-   | pertenece x listaAux = personasAux xs listaAux --si el primer elemento pertenece a la lista auxiliar, pasar al siguiente
-   | otherwise = x : personasAux xs (listaAux ++ [x])
+personasAux (persona:rs) listaAux
+   | pertenece persona listaAux = personasAux rs listaAux --si el primer elemento pertenece a la lista auxiliar, pasar al siguiente
+   | otherwise = persona : personasAux rs (listaAux ++ [persona])
+
+-- idea de la solucion del parcial (la lista quedara con la ultima aparicion de cada elemento, porque saca el primero)
+personasSolucion :: [(String,String)] -> [String]
+personasSolucion rs = sacarRepes (personasRepetidas rs)
+
+sacarRepes :: (Eq t) => [t] -> [t]
+sacarRepes [] = []
+sacarRepes (x:xs)
+ | pertenece x xs = pasoRecursivo
+ | otherwise = x : pasoRecursivo
+ where pasoRecursivo = sacarRepes xs
 
 
+
+
+-- Ejercicio 3
 {-
     problema amigosDe (persona: String, relaciones: seq〈StringxString〉) :    seq〈String〉 {
         requiere: { relacionesValidas(relaciones) }
         asegura: { res tiene exactamente los elementos que figuran en las tuplas
         de relaciones en las que una de sus componentes es persona}
     }
+
+--amigosDe "ana" [("ana","bob")] = ["bob"]
+--amigosDe "ana" [("ana","bob"), ("ana","charly")] = ["bob", "charly"]
+--amigosDe "bob" [("ana","bob"), ("bob","charly"), ("ana","charly")] = ["ana", "charly"]
+--amigosDe "charly" [("ana","bob"), ("bob","charly"), ("ana","charly"), ("dylan","charly")] = ["bob", "ana", "dylan"]
+--amigosDe "dylan" [("ana","bob"), ("bob","charly"), ("ana","charly"), ("dylan","charly"), ("bob","dylan")] = ["dylan"]
 -}
 
 amigosDe :: String -> [(String, String)] -> [String]
 amigosDe _ [] = []
-amigosDe persona ((a, b): xs) = 
+amigosDe persona ((a, b): rs) 
+    | persona == a = b: pasoRecursivo
+    | persona == b = a: pasoRecursivo
+    | otherwise = pasoRecursivo
+    where pasoRecursivo = amigosDe persona rs
+
+
