@@ -717,5 +717,16 @@ sumaAcumulada (x:y:xs) = x : sumaAcumulada (x+y:xs)  --concatenar x con la lista
 -- sumaAcumulada [1, 2, 3] es [1, 3, 6]
 -- sumaAcumulada [1, 2, 3, 4] es [1, 3, 6, 10]
 -- sumaAcumulada [1, 2, 3, 4, 5] = [1, 3, 6, 10, 15]
+------
 
-
+{-
+5.2)
+descomponerEnPrimos :: [Integer] -> [[Integer]] según la siguiente especificación:
+    problema descomponerEnPrimos (s: seq⟨Z⟩) : seq⟨seq⟨Z⟩⟩ {
+        requiere: { Todos los elementos de s son mayores a 2 }
+        asegura: { |resultado| = |s| }
+        asegura: {todos los valores en las listas de resultado son números primos}
+        asegura: {multiplicar todos los elementos en la lista en la posición i de resultado es igual al valor en la posición i de s}
+    }
+Por ejemplo descomponerEnPrimos [2, 10, 6] es [[2], [2, 5], [2, 3]].
+-}
