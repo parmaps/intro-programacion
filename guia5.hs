@@ -691,3 +691,31 @@ insertarNBlancos 0 = ""
 insertarNBlancos n = " " ++ insertarNBlancos (n-1)
 ------
 
+
+--------------
+--Ejercicio 5
+--------------
+
+{-
+5.1)
+sumaAcumulada :: (Num t) => [t] -> [t] según la siguiente especificación:
+
+    problema sumaAcumulada (s: seq⟨T ⟩) : seq⟨T ⟩ {
+        requiere: {T ∈ [N, Z, R]}
+        asegura: {|s| = |resultado| ∧ el valor en la posición i de resultado es la sumatoria desde k = 0 hasta i de s[k]
+    }
+Por ejemplo sumaAcumulada [1, 2, 3, 4, 5] es [1, 3, 6, 10, 15].
+-}
+-- sumaAcumulada :: (Eq t, Num t) => [t] -> [t]
+sumaAcumulada :: (Num t) => [t] -> [t]
+sumaAcumulada [] = []
+sumaAcumulada [x] = [x]
+sumaAcumulada (x:y:xs) = x : sumaAcumulada (x+y:xs)  --concatenar x con la lista resultante de la suma acumulada de x + y, y el resto de la lista xs.
+
+-- sumaAcumulada (x:xs) = x:(sumaAcumulada xs)
+-- sumaAcumulada (x:y:xs) = sumaAcumulada (y:xs) + x ++ sumaAcumulada (xs)
+-- sumaAcumulada [1, 2, 3] es [1, 3, 6]
+-- sumaAcumulada [1, 2, 3, 4] es [1, 3, 6, 10]
+-- sumaAcumulada [1, 2, 3, 4, 5] = [1, 3, 6, 10, 15]
+
+
