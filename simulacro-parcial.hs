@@ -109,3 +109,111 @@ amigosDe persona ((a, b): rs)
     where pasoRecursivo = amigosDe persona rs
 
 
+-- Ejercicio 4
+{-
+    problema personaConMasAmigos (relaciones: seq〈StringxString〉) : String {
+        requiere: { relaciones no vacıa }
+        requiere: { relacionesValidas(relaciones) }
+        asegura: { res es el String que aparece mas veces en las tuplas de relaciones (o alguno de ellos si hay empate)}
+}
+
+
+--personaConMasAmigosRecursiva ["ana", "bob", "charly", "dylan"] [("ana","bob")] = "ana"
+--personaConMasAmigosRecursiva ["ana", "bob", "charly", "dylan"] [("ana","bob"), ("ana","charly")] = "ana"
+--personaConMasAmigosRecursiva ["ana", "bob", "charly", "dylan"] [("ana","bob"), ("bob","charly"), ("ana","charly")] = "bob"
+--personaConMasAmigosRecursiva ["ana", "bob", "charly", "dylan"] [("ana","bob"), ("bob","charly"), ("ana","charly"), ("dylan","charly")] = "bob"
+--personaConMasAmigosRecursiva ["ana", "bob", "charly", "dylan"] [("ana","bob"), ("bob","charly"), ("ana","charly"), ("dylan","charly"), ("bob","dylan")] = "bob"
+
+-}
+
+--VERSION IMPERATIVA: armo una DS con personas y cantidad de amigos, y devuelvo la persona con mas amigos
+--y luego comparar cantidad de amigos y devolver persona con mayor cantidad
+personaConMasAmigosImperativo :: [(String, String)] -> String
+personaConMasAmigosImperativo [] = []
+personaConMasAmigosImperativo relaciones = maximo cantidadAmigosPersonas
+    where
+        listaPersonas = personas relaciones
+        cantidadAmigosPersonas = cantidadDeAmigosTodosTuplas listaPersonas relaciones
+
+--cantidad de amigos de una persona
+cantidadDeAmigosPersona :: String -> [(String, String)] -> Integer
+cantidadDeAmigosPersona [] _ = 0
+cantidadDeAmigosPersona persona relaciones = longitud (amigosDe persona relaciones) 
+
+--armar lista de cantidad de amigos de cada persona [amigos, amigos...]
+cantidadDeAmigosTodos :: [String] -> [(String, String)] -> [Integer]
+cantidadDeAmigosTodos [] _ = []
+cantidadDeAmigosTodos (persona:ps) relaciones = cantidadDeAmigosPersona persona relaciones : cantidadDeAmigosTodos ps relaciones  
+
+--armar lista de tuplas de cantidad de amigos de cada persona [(persona, amigos), (persona, amigos)...]
+cantidadDeAmigosTodosTuplas :: [String] -> [(String, String)] -> [(String, Integer)]
+cantidadDeAmigosTodosTuplas [] _ = []
+cantidadDeAmigosTodosTuplas (persona:ps) relaciones 
+    = (persona, cantidadDeAmigosPersona persona relaciones) : cantidadDeAmigosTodosTuplas ps relaciones  
+
+--obtener el maximo de los valores b y devolver a
+maximo :: [(String, Integer)] -> String
+maximo [] = []
+maximo [(persona1, amigos1)] = persona1
+maximo ((persona1, amigos1):(persona2,amigos2):rs) 
+    -- | amigos1 > amigos2  = persona1 
+    | amigos1 >= amigos2 = maximo ((persona1,amigos1):rs)
+    | otherwise = maximo ((persona2,amigos2):rs)
+
+-- para no tener que armar tuplas -> pasa personas y cantidad de amigos por params
+-- asume que se corresponden 1 a 1 y devuelve persona (en el caso base: cuando hay una sola persona, devuelve esta)
+maximoSolucion :: [String] -> [Int] -> String
+maximoSolucion [p] _ = p
+maximoSolucion (p0:p1:ps) (c0:c1:cs)  | c0 > c1   = maximoSolucion (p0:ps) (c0:cs)
+                              | otherwise = maximoSolucion (p1:ps) (c1:cs)    
+
+longitud :: [t] -> Integer
+longitud [] = 0
+longitud (_:xs) = 1 + longitud xs
+
+
+--VERSION FUNCIONAL: pregunto si la primer persona tiene mas amigos que la segunda, si es asi, pregunto por el resto; si no pregunto lo mismo desde la segunda
+-- TODO 22/9 ME FALTARIA VER SI PUEDO HACERLO DIRECTO -> EN VEZ DE amigosPrimero y amigosSegundo, preguntar por amigosPrimero y amigosResto
+-- Esta version es del mediodia del 22/9, esta bien (inspirada en maximo tmb del 22/9)
+personaConMasAmigosFuncional :: [(String, String)] -> String
+personaConMasAmigosFuncional relaciones = calcularPersonaConMasAmigosFuncional (personas relaciones) relaciones
+
+calcularPersonaConMasAmigosFuncional :: [String] -> [(String, String)] -> String
+calcularPersonaConMasAmigosFuncional [] _ = []
+calcularPersonaConMasAmigosFuncional [p1] _ = p1 --ESTO ES CLAVE! DEFINO BIEN EL CASO BASE: si queda una sola persona, esta es la que mas amigos tiene
+calcularPersonaConMasAmigosFuncional (p1:p2:ps) relaciones  
+    | amigosPrimero >= amigosSegundo = calcularPersonaConMasAmigosFuncional (p1:ps) relaciones
+    | otherwise = calcularPersonaConMasAmigosFuncional (p2:ps) relaciones
+    where 
+        amigosPrimero = longitud (amigosDe p1 relaciones)
+        amigosSegundo = longitud (amigosDe p2 relaciones)
+
+
+-- Esta version es de la tardenoche del 21/9, esta mal y no me daba cuenta por que
+personaConMasAmigosFuncionalMal :: [String] -> [(String, String)] -> String
+personaConMasAmigosFuncionalMal [] _ = []
+personaConMasAmigosFuncionalMal [p] _ = p
+personaConMasAmigosFuncionalMal (p:ps) relaciones 
+    | amigosPrimero > longitud (personaConMasAmigosFuncionalMal ps relaciones) = p
+    | otherwise = personaConMasAmigosFuncionalMal ps relaciones
+     where 
+        amigosPrimero = longitud (amigosDe p relaciones)
+
+
+-- personaConMasAmigos relaciones 
+--     -- | longitud amigosPrimerPersona >= longitud amigosSegundaPersona = "la primer persona tiene mas o igual cantidad de amigos que la segunda"
+--     | longitud amigosPrimerPersona >= longitud amigosSegundaPersona  = primeraPersona
+--     | otherwise = segundaPersona
+--     where 
+--         primeraPersona = head (personas relaciones)
+--         amigosPrimerPersona = amigosDe primeraPersona relaciones
+--         segundaPersona = head (sacarPrimero (personas relaciones))
+--         amigosSegundaPersona = amigosDe segundaPersona relaciones
+        -- amigosSegundaPersona = amigosDe (head (sacarPrimero (personas relaciones))) relaciones
+
+--si el primero tiene mas amigos que el segundo
+
+
+
+
+
