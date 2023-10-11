@@ -1,3 +1,27 @@
+"""
+P: en mi caso habia especificado el tipo de dato como list[int], y luego llame a la funcion con palabras, pero en ninguno momento tuve un error. 
+por que es esto? como deberia funcionar?
+
+R:
+En Python, las anotaciones de tipo son principalmente sugerencias para herramientas y desarrolladores, y no afectan la ejecución del código. 
+Python es un lenguaje de tipado dinámico, lo que significa que no se verifica estáticamente el tipo de datos durante la compilación.
+
+Cuando anotas el tipo de parámetro como list[int], estás sugiriendo que la función debería recibir una lista de enteros. 
+Sin embargo, en tiempo de ejecución, Python no realiza una verificación estricta de tipo en la llamada a la función. 
+Puedes pasarle una lista de cualquier tipo, y Python intentará ejecutar el código siempre que sea posible.
+
+En tu caso, especificaste list[int], pero llamaste a la función con una lista de palabras (List[str]). 
+Python no lanzó un error porque las anotaciones de tipo son opcionales y no afectan la ejecución del código.
+
+Es importante destacar que las anotaciones de tipo son herramientas útiles para mejorar la legibilidad del código, 
+proporcionar documentación adicional y facilitar el uso de herramientas externas, como linters y sistemas de tipo estático (por ejemplo, MyPy). 
+Sin embargo, estas anotaciones no introducen una verificación de tipo estricta en tiempo de ejecución en Python.
+
+Si bien puedes especificar anotaciones de tipo, es común en Python confiar en la documentación y en la legibilidad del código, 
+y no necesitas adherirte estrictamente a las anotaciones de tipo para que el código funcione correctamente. 
+La convención y la comunicación clara en el código son fundamentales.
+"""
+
 # Recordar usar las anotaciones de tipado en todas las variables. Por ejemplo: def funcion(numero: int) ->bool:.
 # En los ejercicios se pueden usar funciones matem´aticas como por ejemplo: sqrt, round, floor, ceil, %.
 # https://docs.python.org/es/3/library/functions.html
@@ -6,6 +30,33 @@
 # ------------
 # Ejercicio 1
 # ------------
+"""
+Que aprendi?
+-La triple comilla es un 'docstring': sirve para documentar codigo. 
+En una funcion se inserta dentro del bloque def y explica brevemente que hace, sus parámetros y su retorno. 
+
+-usar snake_case en Python
+
+-elemento in list:
+se utiliza para verificar si un elemento está presente en una lista, ej:
+def pertenece(lista: list[any], elem: any) -> bool:
+    return elem in lista
+
+-s.count(e): para contar las ocurrencias del elemento e en la lista s
+
+-all: si todos los elementos de un generator son True, devuelve True
+
+-any: si algun elemento de un generator es True, devuelve True
+
+-generators: 
+Una expresión generadora en Python es una forma concisa de crear secuencias iterables (como listas, tuplas, o conjuntos) 
+utilizando una sintaxis más compacta que las list comprehensions. 
+Mientras que una list comprehension crea una lista, una expresión generadora crea un objeto generador.
+Ejemplo con any any(len(palabra) > 7 for palabra in palabras)
+
+
+"""
+
 
 # Nota: Cada problema puede tener mas de una implementacion. Probar utilizando distintas formas de recorrido sobre secuencias,
 # y distintas funciones de Python. No te conformes con una solucion, recordar que siempre conviene consultar con tus docentes.
@@ -64,17 +115,192 @@ def perteneceClase(s: "list[int]", e: int):
 # print(pertenece1short([1,"a"], "b"))
 # print(pertenece1("unodostres", "dos"))
 # print(pertenece1("unodostres", "unodostres"))
-
 # print(pertenece1(["unodostres", "dos"], "dos"))
 
 
-# problema divideATodos (in s:seq<Z>, in e: Z) : Bool {
-# requiere: {e 6 = 0 }
-# asegura: { (res = true) ↔ (para todo i ∈ Z si 0 ≤ i < |s| → s[i] mod e = 0)}
+# 1.2) problema divideATodos (in s:seq<Z>, in e: Z) : Bool {
+#   requiere: {e != 0 }
+#   asegura: { (res = true) ↔ (para todo i ∈ Z si 0 ≤ i < |s| → s[i] mod e = 0)}
 # }
+"""
+Verifica si todos los elementos de la lista son divisibles por elem_in.
+
+:param lista: Lista de enteros.
+:param elem_in: Número por el cual se verifica la divisibilidad.
+:return: True si todos los elementos son divisibles, False en caso contrario.
+"""
+
+def divide_a_todos(lista: list[int], elem_in: int) -> bool:
+    for numero in lista:
+        if numero % elem_in != 0:
+            return False
+    return True
+
+def divide_a_todos_gpt(lista: list[int], elem_in: int) -> bool:
+    return all(numero % elem_in == 0 for numero in lista)
 
 
-# 1.7 Analizar la fortaleza de una contraseña.
+# print(divide_a_todos([1, 2, 3], 1))  # True
+# print(divide_a_todos([1, 2, 3], 2))  # False
+# print(divide_a_todos([2, 8, 152], 2))  # True
+# print(divide_a_todos([9, 15, 152], 3))  # False
+# print(divide_a_todos([9, 15, 153], 3))  # True
+# print(divide_a_todos_gpt([1, 2, 3], 1))  # True
+# print(divide_a_todos_gpt([1, 2, 3], 2))  # False
+# print(divide_a_todos_gpt([2, 8, 152], 2))  # True
+# print(divide_a_todos_gpt([9, 15, 152], 3))  # False
+# print(divide_a_todos_gpt([9, 15, 153], 3))  # True
+
+
+# 1.3) problema sumaTotal (in s:seq<Z>) : Z {
+#   requiere: { T rue }
+#   asegura: { res es la suma de todos los elementos de s}
+# }
+# Nota: no utilizar la función sum() nativa
+
+def suma_total(lista: list[int]) -> int:
+    """
+    Calcula la suma de todos los elementos en la lista.
+
+    :param lista: Lista de enteros.
+    :return: Suma de los elementos en la lista.
+    """
+    total: int = 0
+    for numero in lista:
+        total += numero
+    return total
+
+# print(suma_total([1, 2, 3])) # 6
+# print(suma_total([10, 20, 30])) # 60
+# print(suma_total([9, 15, 153])) # 177
+
+
+# 1.4) problema ordenados (in s:seq<Z>) : Bool {
+# requiere: { T rue }
+# asegura: { res = true ↔(para todo i ∈ Z si 0 ≤ i < (|s| − 1) → s[i] < s[i + 1]}
+# }
+def ordenados(lista: list[int]) -> bool:
+    for i in range(len(lista) - 1):
+        if lista[i] >= lista[i + 1]:
+            return False
+    return True
+
+def ordenados_con_all(lista: list[int]) -> bool:
+    return all(lista[i] < lista[i + 1] for i in range(len(lista) - 1))
+
+# print(ordenados([1, 2, 3])) # True
+# print(ordenados([1, 3, 2])) # False
+# print(ordenados([1, 1, 3])) # False
+# print(ordenados([-1, 2, 3, 4, 5, 150, 1843])) # True
+
+# print(ordenados_con_all([1, 2, 3])) # True
+# print(ordenados_con_all([1, 3, 2])) # False
+# print(ordenados_con_all([1, 1, 3])) # False
+# print(ordenados_con_all([-1, 2, 3, 4, 5, 150, 1843])) # True
+
+
+# 1.5) Dada una lista de palabras, devolver verdadero si alguna palabra tiene longitud mayor a 7.
+def mas_largos_que_7(palabras: list[str]) -> bool:
+    for palabra in palabras:
+        if len(palabra) > 7:
+            return True
+    return False
+
+
+def mas_largos_que_7_con_all(palabras: list[str]) -> bool:
+    return any(len(palabra) > 7 for palabra in palabras)
+
+# print(mas_largos_que_7(["hola", "como", "andas"]))  # False
+# print(mas_largos_que_7(["hola", "como", "campeon"]))  # False
+# print(mas_largos_que_7(["hola", "babasonico", "campeon"]))  # True
+
+# print(mas_largos_que_7_con_all(["hola", "como", "andas"]))  # False
+# print(mas_largos_que_7_con_all(["hola", "como", "campeon"]))  # False
+# print(mas_largos_que_7_con_all(["hola", "babasonico", "campeon"]))  # True
+
+
+# 1.6) Dado un texto en formato string, devolver verdadero si es palı́ndromo (se lee igual en ambos sentidos), 
+# falso en caso contrario
+def es_par(numero: int):
+    return numero % 2 == 0
+
+def invertir_cadena(cadena):
+    return cadena[::-1]
+
+def palindromo(texto: str) -> bool:
+    """
+    Verifica si el texto es palı́ndromo (se lee igual en ambos sentidos).    
+    Divide la palabra a la mitad (de distinta manera si tiene longitud par o impar),
+    la invierte y pregunta si ambas mitades son iguales.
+
+    :param texto: Texto en formato string.
+    :return: True si es palindromo, False en caso contrario.
+    """
+    
+    # Separar la primera mitad del texto
+    slice_mitad1 = slice(0, len(texto) // 2)
+    mitad1 = texto[slice_mitad1]
+    # podria usar directamente: mitad1 = texto[:len(texto) // 2] 
+    
+    if es_par(len(texto)): # Si es par, la segunda aparte arranca desde la mitad de la palabra
+        slice_mitad2 = slice(len(texto) // 2, len(texto))
+
+    else: # Si es impar, no contempla el caracter del medio
+        slice_mitad2 = slice(len(texto) // 2 + 1 , len(texto))
+    
+    # Invertir la segunda mitad
+    mitad2_invertida = invertir_cadena(texto[slice_mitad2])
+    
+    # Comparar mitades    
+    return mitad1 == mitad2_invertida
+
+def palindromo_gpt(texto: str) -> bool:
+    """
+    Verifica si el texto es palíndromo (se lee igual en ambos sentidos).
+    
+    :param texto: Texto en formato string.
+    :return: True si es palíndromo, False en caso contrario.
+    """
+    
+    # Separar las mitades del texto
+
+    mitad1 = texto[:len(texto) // 2] 
+    # va desde el principio con ":", hasta la mitad con "len(texto) // 2"
+    # print(mitad1)
+
+    # ESTO VALE SOLO PARA IMPARES:
+    # Arrancar en la mitad, sin la letra del medio
+    t1 = texto[(len(texto) // 2 + 1):] # +1 corre para la derecha
+    t2 = texto[-(len(texto) // 2):]
+
+    # Arrancar en la mitad, con la letra del medio
+    t3 = texto[(len(texto) // 2):]
+    t4 = texto[-(len(texto) // 2 + 1):] # al arrancar con indice negativo, +1 corre para la izquierda
+    # print(t1, t2, t3, t4)
+
+    t5 = texto[-(len(texto) // 2 + 10):] # como +10 corre 10 para la izquierda, si la palabra tiene 20 caracteres o menos la imprime toda
+    # print("t5:", t5)
+
+
+    mitad2 = texto[-(len(texto) // 2):] if es_par(len(texto)) else texto[(len(texto) // 2 + 1):]
+    mitad2_indice_negativo = texto[-(len(texto) // 2):] if es_par(len(texto)) else texto[-(len(texto) // 2):]
+    # va desde la mitad con "-(len(texto) // 2)" (contando desde el final por el indice negativo), hasta el final con ":"
+    # print(mitad2)
+
+    # Comparar mitades directamente
+    return mitad1 == mitad2_indice_negativo[::-1] 
+
+# print(palindromo("poop")) # True
+# print(palindromo("acurruca")) # True
+# print(palindromo("ojo")) # True
+# print(palindromo("sometemos")) # True
+
+print(palindromo_gpt("poop")) # True
+print(palindromo_gpt("acurruca")) # True
+print(palindromo_gpt("ojo")) # True
+print(palindromo_gpt("sometemos")) # True
+
+# 1.7) Analizar la fortaleza de una contraseña.
 # El parametro de entrada de la funcion sera un string con la contrasena a analizar,
 # y la salida otro string con tres posibles valores: VERDE, AMARILLA y ROJA.
 # Nota: en python la “˜n/ ˜N” es considerado un caracter especial y no se comporta como cualquier otra letra.
@@ -159,6 +385,7 @@ def borrarPosicionesParesInOut(lista: "list[int]") -> None:
 # 1.2) Lo mismo del punto anterior pero esta vez sin modificar la lista original, devolviendo una nueva lista, igual a la anterior
 # pero con las posiciones pares en cero, es decir, la lista pasada como parametro es de tipo in
 
+
 def borrarPosicionesParesIn(lista: "list[int]") -> [int]:
     nuevaLista = lista.copy()
     for i in range(0, len(lista), 2):
@@ -183,6 +410,7 @@ def borrarVocales(palabra: str) -> str:
         if palabra[i] not in vocales:
             palabraSinVocales = palabraSinVocales + (palabra[i])
     return palabraSinVocales
+
 
 # print(borrarVocales("joaquin"))
 # print(borrarVocales("lucas"))
