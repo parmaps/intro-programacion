@@ -26,9 +26,7 @@ La convención y la comunicación clara en el código son fundamentales.
 # https://docs.python.org/es/3/library/functions.html
 # Revisar la especificaci´on de las operaciones comunes sobre secuencias: https://docs.python.org/es/3/library/stdtypes.html?highlight=list#typesseq
 
-# ------------
-# Ejercicio 1
-# ------------
+
 
 # Que aprendi?
 """
@@ -116,8 +114,27 @@ def saldo(movimientos: list[tuple[str, int]]) -> int:
     vocales = set(filter(lambda letra: letra in "aeiou", palabra))
     return len(vocales) >= 3
 
+2.5) Para dar vuelta un string, usar esto: string[::-1]
+Puedes usar esta técnica no solo con cadenas de texto, sino también con listas y otras secuencias en Python.
+    El primer : indica que estamos utilizando "slicing".
+    El segundo : después del primer : indica el límite superior e inferior del slice, y está en blanco, lo que significa "toda la cadena".
+    El -1 como tercer valor indica el paso. En este caso, -1 significa que estás tomando elementos en orden inverso.
+-> la sintaxis indica que estás utilizando un "slice" con un paso de -1, lo que invierte el orden de los elementos.
+Ejemplo: return palabra[::-1]
+
+Otro ejemplo distinto de slicing:
+original_numeros = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+seleccionados = original_numeros[1:8:2]
+resultado: [1, 3, 5, 7].
+Como funciona?
+Estamos seleccionando elementos desde el índice 1 hasta el índice 8 (sin incluirlo), con un paso de 2. 
+Por lo tanto, estamos seleccionando los elementos en las posiciones 1, 3, 5, y 7.
+
 """
 
+# ------------
+# Ejercicio 1
+# ------------
 
 # Nota: Cada problema puede tener mas de una implementacion. Probar utilizando distintas formas de recorrido sobre secuencias,
 # y distintas funciones de Python. No te conformes con una solucion, recordar que siempre conviene consultar con tus docentes.
@@ -555,10 +572,10 @@ def tiene_al_menos_3_vocales_distintas_GPT(palabra: str) -> bool:
     vocales = set(filter(lambda letra: letra in "aeiou", palabra))
     return len(vocales) >= 3
 
-print(tiene_al_menos_3_vocales_distintas("qwrty")) # 0 -> False
-print(tiene_al_menos_3_vocales_distintas("banana")) # 1 -> False
-print(tiene_al_menos_3_vocales_distintas("falopero")) # 3 -> True
-print(tiene_al_menos_3_vocales_distintas("murcielago")) # 5 -> True
+# print(tiene_al_menos_3_vocales_distintas("qwrty")) # 0 -> False
+# print(tiene_al_menos_3_vocales_distintas("banana")) # 1 -> False
+# print(tiene_al_menos_3_vocales_distintas("falopero")) # 3 -> True
+# print(tiene_al_menos_3_vocales_distintas("murcielago")) # 5 -> True
 
 
 # ------------
@@ -631,11 +648,40 @@ def reemplazar_vocales(palabra: list[str]) -> list[str]:
 
     return palabraNueva    
 
-print(reemplazar_vocales("joaquin"))
-print(reemplazar_vocales("lucas"))
+# print(reemplazar_vocales("joaquin"))
+# print(reemplazar_vocales("lucas"))
 
 
 
+# 2.5) problema daVueltaStr (in s:seq<Char>) : seq<Char> {
+#   requiere: { T rue }
+#   asegura: { Para todo i ∈ Z si 0 ≤ i < |res| → res[i] = s[|s| − i − 1]}
+# }
+def dar_vuelta_string(palabra: list[str]) -> list[str] :
+    return palabra[::-1]
+
+# print(dar_vuelta_string("hola"))
+
+# 6. problema eliminarRepetidos (in s:seq<Char>) : seq<Char> {
+# requiere: { T rue }
+# asegura: {(|res| ≤ |s|) ∧ (para todo i ∈ Z si 0 ≤ i < |s| → pertenece(s[i], res)) ∧ (para todo i, j ∈ Z si
+# (0 ≤ i, j < |res| ∧ i != j) → res[i] != res[j])}
+# } 
+
+def eliminar_repetidos(texto: list[str]) -> list[str]:
+    nuevoTexto: str = ""
+
+    for letra in texto:
+        if not pertenece1(nuevoTexto, letra):
+            print(letra)
+            nuevoTexto += letra
+    return nuevoTexto
+
+# print(eliminar_repetidos("hola")) # hola
+# print(eliminar_repetidos("carlitox")) # carlitox
+print(eliminar_repetidos("merengue")) # merngu
+print(eliminar_repetidos("lucas parma")) # lucas prm
+print(eliminar_repetidos("neuquen")) # neuq
 # -----------
 # Ejercicio 5
 # -----------
