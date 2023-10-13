@@ -1,4 +1,4 @@
-# P: En mi caso habia especificado el tipo de dato como list[int], y luego llame a la funcion con palabras, pero en ninguno momento tuve un error. 
+# P: En mi caso habia especificado el tipo de dato como list[int], y luego llame a la funcion con palabras, pero en ninguno momento tuve un error.
 # Por que es esto? como deberia funcionar?
 """
 R:
@@ -25,7 +25,6 @@ La convención y la comunicación clara en el código son fundamentales.
 # En los ejercicios se pueden usar funciones matem´aticas como por ejemplo: sqrt, round, floor, ceil, %.
 # https://docs.python.org/es/3/library/functions.html
 # Revisar la especificaci´on de las operaciones comunes sobre secuencias: https://docs.python.org/es/3/library/stdtypes.html?highlight=list#typesseq
-
 
 
 # Que aprendi?
@@ -130,6 +129,12 @@ Como funciona?
 Estamos seleccionando elementos desde el índice 1 hasta el índice 8 (sin incluirlo), con un paso de 2. 
 Por lo tanto, estamos seleccionando los elementos en las posiciones 1, 3, 5, y 7.
 
+3) Puedes utilizar la función sum para calcular la suma de los elementos de la lista y luego dividir por la longitud de la lista
+(para obtener promedio)
+-> forma más concisa y eficiente de calcular la suma de una lista en comparación con un bucle for explícito.
+# def promedio_con_sum(notas: list[int]) -> int:
+        # return sum(notas) // len(notas)
+
 """
 
 # ------------
@@ -147,6 +152,7 @@ Por lo tanto, estamos seleccionando los elementos en las posiciones 1, 3, 5, y 7
 # ¿Si la especificaramos e implementaramos con tipos genericos,
 # se podrıa usar esta misma funcion para buscar un caracter dentro de un string?
 
+
 # list[int]: POR QUE NO FUNCIONA ESTO? ME PIDE QUE AGREGUE COMILLAS (AL PROFESOR NO LE SUCEDE)
 # RESPUESTA: depende el sistema operativo (al parecer) cual version compila: si list[int], o "list[int]", o [int]
 # list[int]: POR QUE PUEDO MANDAR CUALQUIER TIPO AL LLAMAR LA FUNCION? DONDE DEBERIA MANIFESTARSE ESTO??
@@ -162,11 +168,13 @@ def pertenece1(lista: list, elemIn: str) -> bool:
 def pertenece1short(lista: list, elemIn: int) -> bool:
     return elemIn in lista
 
+
 def pertenece2(lista: "list[int]", elemIn: int) -> bool:
     for i in range(len(lista)):
         if lista[i] == elemIn:
             return True
     return False
+
 
 def pertenece3(lista: list, elemIn: int) -> bool:
     indice: int = 0
@@ -176,9 +184,11 @@ def pertenece3(lista: list, elemIn: int) -> bool:
         indice += 1
     return False
 
+
 # si aparece al menos 1 vez (count > 0), pertenece
 def perteneceClase(s: "list[int]", e: int):
     return s.count(e) == 0
+
 
 # print(pertenece1([1,2], 2))
 # print(pertenece1short([1,2], 2))
@@ -438,11 +448,16 @@ def analizarPassword(password: str) -> str:
     # def tieneNumero(password: str) -> bool:
     #     return any(c.isdigit() for c in password)
 
-    condicionVerde: bool = len(password) > 8 and tieneMinuscula(password) and tieneMayuscula(password) and tieneNumero(password)
+    condicionVerde: bool = (
+        len(password) > 8
+        and tieneMinuscula(password)
+        and tieneMayuscula(password)
+        and tieneNumero(password)
+    )
 
     if len(password) < 5:
         return "ROJA"
-    elif (condicionVerde):
+    elif condicionVerde:
         return "VERDE"
     else:
         return "AMARILLA"
@@ -493,6 +508,7 @@ En última instancia, elige el enfoque que encuentres más claro y que facilite 
 # dinero y “R” para retiro de dinero, y adem´as el monto de cada operaci´on. Por ejemplo, si la lista de tuplas es [(‘‘I’’,
 # 2000), (‘‘R’’, 20),(‘‘R’’, 1000),(‘‘I’’, 300)] entonces el saldo actual es 1280.
 
+
 def saldo(movimientos: list[tuple[str, int]]) -> int:
     """
     Calcula el saldo actual a partir de un historial de movimientos en una cuenta bancaria.
@@ -505,18 +521,19 @@ def saldo(movimientos: list[tuple[str, int]]) -> int:
     :rtype: int
     """
 
-    saldo:int = 0
+    saldo: int = 0
 
-    def esIngreso(movimiento:str) -> bool: 
+    def esIngreso(movimiento: str) -> bool:
         return movimiento[0] == "I"
-    
+
     for movimiento in movimientos:
         if esIngreso(movimiento):
             saldo += movimiento[1]
         else:
             saldo -= movimiento[1]
 
-    return saldo    
+    return saldo
+
 
 # def saldo(movimiento:[(str), (int)]) -> int:
 # print(saldo([("R", 100), ("I", 50), ("R", 75)])) # -125
@@ -526,22 +543,22 @@ def saldo(movimientos: list[tuple[str, int]]) -> int:
 
 # 1.9) Recorrer una palabra en formato string y devolver True si esta tiene al menos 3 vocales distintas y False en caso contrario.
 def tiene_al_menos_3_vocales_distintas(palabra: str) -> bool:
-    # Approach 1) 
+    # Approach 1)
     # Filtrar vocales
     # Para la vocal actual:
-        # Si no esta en una lista de vocales distintas, agregarla    
+    # Si no esta en una lista de vocales distintas, agregarla
     # Repetir
     # Fuera del loop, contar cantidad de vocales distintas
 
     def filtrar_vocales(letra: str) -> str:
         return letra in "aeiou"
-    
+
     vocales = list(filter(filtrar_vocales, palabra))
 
     vocales_distintas: list[str] = []
-    
+
     for vocal in vocales:
-        if vocal not in vocales_distintas: 
+        if vocal not in vocales_distintas:
             vocales_distintas.append(vocal)
 
     return len(vocales_distintas) >= 3
@@ -557,20 +574,21 @@ def tiene_al_menos_3_vocales_distintas_GPT(palabra: str) -> bool:
     :rtype: bool
 
     Diferencias:
-    1) Uso de conjuntos: 
-    Puedes utilizar conjuntos (set) para almacenar las vocales distintas en lugar de una lista. 
+    1) Uso de conjuntos:
+    Puedes utilizar conjuntos (set) para almacenar las vocales distintas en lugar de una lista.
     Los conjuntos no permiten elementos duplicados, por lo que automáticamente te aseguras de tener solo vocales únicas.
 
-    2) Uso de funciones integradas: 
+    2) Uso de funciones integradas:
     Puedes aprovechar funciones integradas de Python para simplificar tu código.
 
-    3) Expresiones lamdba: 
-    Una expresión lambda en Python es una forma de crear funciones anónimas o sin nombre. Son útiles cuando necesitas funciones pequeñas y temporales, generalmente para operaciones simples.    
+    3) Expresiones lamdba:
+    Una expresión lambda en Python es una forma de crear funciones anónimas o sin nombre. Son útiles cuando necesitas funciones pequeñas y temporales, generalmente para operaciones simples.
     """
 
     # Filtrar las vocales utilizando un conjunto y una funcion anonima lambda
     vocales = set(filter(lambda letra: letra in "aeiou", palabra))
     return len(vocales) >= 3
+
 
 # print(tiene_al_menos_3_vocales_distintas("qwrty")) # 0 -> False
 # print(tiene_al_menos_3_vocales_distintas("banana")) # 1 -> False
@@ -587,9 +605,11 @@ def tiene_al_menos_3_vocales_distintas_GPT(palabra: str) -> bool:
 # Esta funcion modifica el parametro ingresado, es decir, la lista es un parametro de tipo inout.
 # PARAMETRO INOUT: ingresa, se modifica y luego se utiliza con este nuevo valor (la funcion no retorna nada)
 
+
 def borrarPosicionesParesInOut(lista: "list[int]") -> None:
     for i in range(0, len(lista), 2):
         lista[i] = 0
+
 
 # a:[int]= [1, 2, 3, 4, 5]
 # print(a)
@@ -598,6 +618,7 @@ def borrarPosicionesParesInOut(lista: "list[int]") -> None:
 
 # 2.2) Lo mismo del punto anterior pero esta vez sin modificar la lista original, devolviendo una nueva lista, igual a la anterior
 # pero con las posiciones pares en cero, es decir, la lista pasada como parametro es de tipo in
+
 
 def borrarPosicionesParesIn(lista: "list[int]") -> [int]:
     nuevaLista = lista.copy()
@@ -624,6 +645,7 @@ def borrarVocales(palabra: str) -> str:
             palabraSinVocales = palabraSinVocales + (palabra[i])
     return palabraSinVocales
 
+
 # print(borrarVocales("joaquin"))
 # print(borrarVocales("lucas"))
 
@@ -635,30 +657,31 @@ def borrarVocales(palabra: str) -> str:
 #   }
 # Reemplaza cada vocal por un guion bajo, y deja el resto de los caracteres intactos
 
+
 def reemplazar_vocales(palabra: list[str]) -> list[str]:
-    
     palabraNueva: str = ""
     vocales: str = "aeiou"
 
     for letra in palabra:
         if letra in vocales:
-            palabraNueva += ("_")
+            palabraNueva += "_"
         else:
             palabraNueva += letra
 
-    return palabraNueva    
+    return palabraNueva
+
 
 # print(reemplazar_vocales("joaquin"))
 # print(reemplazar_vocales("lucas"))
-
 
 
 # 2.5) problema daVueltaStr (in s:seq<Char>) : seq<Char> {
 #   requiere: { T rue }
 #   asegura: { Para todo i ∈ Z si 0 ≤ i < |res| → res[i] = s[|s| − i − 1]}
 # }
-def dar_vuelta_string(palabra: list[str]) -> list[str] :
+def dar_vuelta_string(palabra: list[str]) -> list[str]:
     return palabra[::-1]
+
 
 # print(dar_vuelta_string("hola"))
 
@@ -666,7 +689,8 @@ def dar_vuelta_string(palabra: list[str]) -> list[str] :
 # requiere: { T rue }
 # asegura: {(|res| ≤ |s|) ∧ (para todo i ∈ Z si 0 ≤ i < |s| → pertenece(s[i], res)) ∧ (para todo i, j ∈ Z si
 # (0 ≤ i, j < |res| ∧ i != j) → res[i] != res[j])}
-# } 
+# }
+
 
 def eliminar_repetidos(texto: list[str]) -> list[str]:
     nuevoTexto: str = ""
@@ -679,9 +703,58 @@ def eliminar_repetidos(texto: list[str]) -> list[str]:
 
 # print(eliminar_repetidos("hola")) # hola
 # print(eliminar_repetidos("carlitox")) # carlitox
-print(eliminar_repetidos("merengue")) # merngu
-print(eliminar_repetidos("lucas parma")) # lucas prm
-print(eliminar_repetidos("neuquen")) # neuq
+# print(eliminar_repetidos("merengue")) # merngu
+# print(eliminar_repetidos("lucas parma")) # lucas prm
+# print(eliminar_repetidos("neuquen")) # neuq
+
+
+# -----------
+# Ejercicio 3
+# -----------
+# Implementar una función para conocer el estado de aprobación de una materia
+# a partir de las notas obtenidas por un/a alumno/a cumpliendo con la siguiente especificación:
+# problema aprobado (in notas: seq<Z>) : Z {
+# requiere: {|notas| > 0}
+# requiere: {Para todo i ∈ Z si 0 ≤ i < |notas| → 0 ≤ notas[i] ≤ 10)}
+# asegura: {res = 1 ↔ todos los elementos de notas son mayores o iguales a 4 y el promedio es mayor o igual a 7}
+# asegura: {res = 2 ↔ todos los elementos de notas son mayores o iguales a 4 y el promedio está entre 4 (inclusive) y 7}
+# asegura: {res = 3 ↔ alguno de los elementos de notas es menor a 4 o el promedio es menor a 4}
+# }
+
+
+def aprobado(notas: list[int]) -> int:
+    print(notas)
+
+    def son_mayores_a_4(notas: list[int]) -> bool:
+        return all(nota >= 4 for nota in notas)
+
+    def promedio(notas: list[int]) -> int:
+        total_notas: int = 0
+        for nota in notas:
+            total_notas += nota
+        return total_notas // len(notas)
+    
+    # def promedio_con_sum(notas: list[int]) -> int:
+        # return sum(notas) // len(notas)
+
+    if son_mayores_a_4(notas) and promedio(notas) >= 7:
+        return 1
+    elif son_mayores_a_4(notas) and promedio(notas) < 7 and promedio(notas) >= 4:
+        return 2
+    else:
+        return 3
+    
+print(aprobado([3, 5, 6])) # 3: no aprueba
+print(aprobado([4, 5, 6])) # 2: aprueba
+print(aprobado([7, 7, 6])) # 2: aprueba
+print(aprobado([7, 7, 7])) # 1: promociona
+
+
+
+# -----------
+# Ejercicio 4
+# -----------
+
 # -----------
 # Ejercicio 5
 # -----------
