@@ -1,7 +1,6 @@
+# P: En mi caso habia especificado el tipo de dato como list[int], y luego llame a la funcion con palabras, pero en ninguno momento tuve un error. 
+# Por que es esto? como deberia funcionar?
 """
-P: en mi caso habia especificado el tipo de dato como list[int], y luego llame a la funcion con palabras, pero en ninguno momento tuve un error. 
-por que es esto? como deberia funcionar?
-
 R:
 En Python, las anotaciones de tipo son principalmente sugerencias para herramientas y desarrolladores, y no afectan la ejecución del código. 
 Python es un lenguaje de tipado dinámico, lo que significa que no se verifica estáticamente el tipo de datos durante la compilación.
@@ -30,8 +29,9 @@ La convención y la comunicación clara en el código son fundamentales.
 # ------------
 # Ejercicio 1
 # ------------
+
+# Que aprendi?
 """
-Que aprendi?
 -La triple comilla es un 'docstring': sirve para documentar codigo. 
 En una funcion se inserta dentro del bloque def y explica brevemente que hace, sus parámetros y su retorno. 
 
@@ -54,6 +54,67 @@ utilizando una sintaxis más compacta que las list comprehensions.
 Mientras que una list comprehension crea una lista, una expresión generadora crea un objeto generador.
 Ejemplo con any any(len(palabra) > 7 for palabra in palabras)
 
+-def invertir_cadena(cadena):
+    return cadena[::-1]
+
+-ver 1.6) palindromo para manejo de textos e indices
+
+-indices negativos:
+En Python, los índices negativos se utilizan para contar desde el final de una secuencia, como una cadena o una lista. 
+En lugar de comenzar desde el primer elemento (índice 0), comienzan desde el último elemento (índice -1), y así sucesivamente. 
+ P  y  t  h  o  n
+ 0  1  2  3  4  5
+-6 -5 -4 -3 -2 -1
+
+
+-Funciones de Python: islower(), isupper(), isdigit()
+-> Ejs
+    #  def tieneMinuscula(password: str) -> bool:
+    #   return any(c.islower() for c in password) (devuelve si alguno -"any"- es minuscula -"c.islower()"- en el generador -"for c in password"-)
+    #  def tieneMayuscula(password: str) -> bool:
+    #     return any(c.isupper() for c in password)
+    # def tieneNumero(password: str) -> bool:
+    #     return any(c.isdigit() for c in password)
+
+    
+1.8) funcion con tipo de tuplas:
+def saldo(movimientos: list[tuple[str, int]]) -> int:
+    
+1.9)
+-Conjuntos:
+    Un conjunto (set) en Python es una colección no ordenada de elementos únicos.
+    Puedes utilizar un conjunto para almacenar múltiples valores sin duplicados.  
+    Puedes utilizar conjuntos (set) para almacenar (por ejemplo) las vocales distintas en lugar de una lista. 
+    Los conjuntos no permiten elementos duplicados, por lo que automáticamente te aseguras de tener solo vocales únicas.
+    Los conjuntos no mantienen un orden específico, por lo que el orden de impresión puede no ser el mismo que el orden en el que se agregaron los elementos. 
+    La sintaxis básica:
+    # Crear un conjunto vacío
+    conjunto_vacio = set()
+    # Crear un conjunto con elementos
+    mi_conjunto = {1, 2, 3, 4, 5}
+    # Agregar elementos a un conjunto
+    mi_conjunto.add(6)
+    mi_conjunto.add(7)
+
+    set(...): Convierte el resultado en un conjunto (en el ejemplo eliminando duplicados y dejando solo vocales únicas).
+
+-Funciones lamdba
+    3) Expresiones lamdba: 
+    Una expresión lambda en Python es una forma de crear funciones anónimas o sin nombre. 
+    Son útiles cuando necesitas funciones pequeñas y temporales, generalmente para operaciones simples.
+    La sintaxis básica de una expresión lambda es:
+        lambda argumentos: expresion  
+    Ej.:
+    # Función lambda que suma dos números
+    suma = lambda x, y: x + y   
+
+-> Ejemplo con ambas 
+    def tiene_al_menos_3_vocales_distintas_GPT(palabra: str) -> bool:
+    # Verifica si una palabra tiene al menos 3 vocales distintas.
+
+    # Filtrar las vocales utilizando un conjunto y una funcion anonima lambda
+    vocales = set(filter(lambda letra: letra in "aeiou", palabra))
+    return len(vocales) >= 3
 
 """
 
@@ -68,7 +129,6 @@ Ejemplo con any any(len(palabra) > 7 for palabra in palabras)
 # Implementar al menos de 3 formas distintas este problema.
 # ¿Si la especificaramos e implementaramos con tipos genericos,
 # se podrıa usar esta misma funcion para buscar un caracter dentro de un string?
-
 
 # list[int]: POR QUE NO FUNCIONA ESTO? ME PIDE QUE AGREGUE COMILLAS (AL PROFESOR NO LE SUCEDE)
 # RESPUESTA: depende el sistema operativo (al parecer) cual version compila: si list[int], o "list[int]", o [int]
@@ -85,13 +145,11 @@ def pertenece1(lista: list, elemIn: str) -> bool:
 def pertenece1short(lista: list, elemIn: int) -> bool:
     return elemIn in lista
 
-
 def pertenece2(lista: "list[int]", elemIn: int) -> bool:
     for i in range(len(lista)):
         if lista[i] == elemIn:
             return True
     return False
-
 
 def pertenece3(lista: list, elemIn: int) -> bool:
     indice: int = 0
@@ -101,11 +159,9 @@ def pertenece3(lista: list, elemIn: int) -> bool:
         indice += 1
     return False
 
-
 # si aparece al menos 1 vez (count > 0), pertenece
 def perteneceClase(s: "list[int]", e: int):
     return s.count(e) == 0
-
 
 # print(pertenece1([1,2], 2))
 # print(pertenece1short([1,2], 2))
@@ -130,11 +186,13 @@ Verifica si todos los elementos de la lista son divisibles por elem_in.
 :return: True si todos los elementos son divisibles, False en caso contrario.
 """
 
+
 def divide_a_todos(lista: list[int], elem_in: int) -> bool:
     for numero in lista:
         if numero % elem_in != 0:
             return False
     return True
+
 
 def divide_a_todos_gpt(lista: list[int], elem_in: int) -> bool:
     return all(numero % elem_in == 0 for numero in lista)
@@ -158,6 +216,7 @@ def divide_a_todos_gpt(lista: list[int], elem_in: int) -> bool:
 # }
 # Nota: no utilizar la función sum() nativa
 
+
 def suma_total(lista: list[int]) -> int:
     """
     Calcula la suma de todos los elementos en la lista.
@@ -169,6 +228,7 @@ def suma_total(lista: list[int]) -> int:
     for numero in lista:
         total += numero
     return total
+
 
 # print(suma_total([1, 2, 3])) # 6
 # print(suma_total([10, 20, 30])) # 60
@@ -185,8 +245,10 @@ def ordenados(lista: list[int]) -> bool:
             return False
     return True
 
+
 def ordenados_con_all(lista: list[int]) -> bool:
     return all(lista[i] < lista[i + 1] for i in range(len(lista) - 1))
+
 
 # print(ordenados([1, 2, 3])) # True
 # print(ordenados([1, 3, 2])) # False
@@ -210,6 +272,7 @@ def mas_largos_que_7(palabras: list[str]) -> bool:
 def mas_largos_que_7_con_all(palabras: list[str]) -> bool:
     return any(len(palabra) > 7 for palabra in palabras)
 
+
 # print(mas_largos_que_7(["hola", "como", "andas"]))  # False
 # print(mas_largos_que_7(["hola", "como", "campeon"]))  # False
 # print(mas_largos_que_7(["hola", "babasonico", "campeon"]))  # True
@@ -219,86 +282,103 @@ def mas_largos_que_7_con_all(palabras: list[str]) -> bool:
 # print(mas_largos_que_7_con_all(["hola", "babasonico", "campeon"]))  # True
 
 
-# 1.6) Dado un texto en formato string, devolver verdadero si es palı́ndromo (se lee igual en ambos sentidos), 
+# 1.6) Dado un texto en formato string, devolver verdadero si es palı́ndromo (se lee igual en ambos sentidos),
 # falso en caso contrario
 def es_par(numero: int):
     return numero % 2 == 0
 
+
 def invertir_cadena(cadena):
     return cadena[::-1]
 
+
 def palindromo(texto: str) -> bool:
     """
-    Verifica si el texto es palı́ndromo (se lee igual en ambos sentidos).    
+    Verifica si el texto es palı́ndromo (se lee igual en ambos sentidos).
     Divide la palabra a la mitad (de distinta manera si tiene longitud par o impar),
     la invierte y pregunta si ambas mitades son iguales.
 
     :param texto: Texto en formato string.
     :return: True si es palindromo, False en caso contrario.
     """
-    
+
     # Separar la primera mitad del texto
     slice_mitad1 = slice(0, len(texto) // 2)
     mitad1 = texto[slice_mitad1]
-    # podria usar directamente: mitad1 = texto[:len(texto) // 2] 
-    
-    if es_par(len(texto)): # Si es par, la segunda aparte arranca desde la mitad de la palabra
+    # podria usar directamente: mitad1 = texto[:len(texto) // 2]
+
+    if es_par(
+        len(texto)
+    ):  # Si es par, la segunda aparte arranca desde la mitad de la palabra
         slice_mitad2 = slice(len(texto) // 2, len(texto))
 
-    else: # Si es impar, no contempla el caracter del medio
-        slice_mitad2 = slice(len(texto) // 2 + 1 , len(texto))
-    
+    else:  # Si es impar, no contempla el caracter del medio
+        slice_mitad2 = slice(len(texto) // 2 + 1, len(texto))
+
     # Invertir la segunda mitad
     mitad2_invertida = invertir_cadena(texto[slice_mitad2])
-    
-    # Comparar mitades    
+
+    # Comparar mitades
     return mitad1 == mitad2_invertida
+
 
 def palindromo_gpt(texto: str) -> bool:
     """
     Verifica si el texto es palíndromo (se lee igual en ambos sentidos).
-    
+
     :param texto: Texto en formato string.
     :return: True si es palíndromo, False en caso contrario.
     """
-    
+
     # Separar las mitades del texto
 
-    mitad1 = texto[:len(texto) // 2] 
+    mitad1 = texto[: len(texto) // 2]
     # va desde el principio con ":", hasta la mitad con "len(texto) // 2"
     # print(mitad1)
 
     # ESTO VALE SOLO PARA IMPARES:
     # Arrancar en la mitad, sin la letra del medio
-    t1 = texto[(len(texto) // 2 + 1):] # +1 corre para la derecha
-    t2 = texto[-(len(texto) // 2):]
+    t1 = texto[(len(texto) // 2 + 1) :]  # +1 corre para la derecha
+    t2 = texto[-(len(texto) // 2) :]
 
     # Arrancar en la mitad, con la letra del medio
-    t3 = texto[(len(texto) // 2):]
-    t4 = texto[-(len(texto) // 2 + 1):] # al arrancar con indice negativo, +1 corre para la izquierda
+    t3 = texto[(len(texto) // 2) :]
+    t4 = texto[
+        -(len(texto) // 2 + 1) :
+    ]  # al arrancar con indice negativo, +1 corre para la izquierda
     # print(t1, t2, t3, t4)
 
-    t5 = texto[-(len(texto) // 2 + 10):] # como +10 corre 10 para la izquierda, si la palabra tiene 20 caracteres o menos la imprime toda
+    t5 = texto[
+        -(len(texto) // 2 + 10) :
+    ]  # como +10 corre 10 para la izquierda, si la palabra tiene 20 caracteres o menos la imprime toda
     # print("t5:", t5)
 
-
-    mitad2 = texto[-(len(texto) // 2):] if es_par(len(texto)) else texto[(len(texto) // 2 + 1):]
-    mitad2_indice_negativo = texto[-(len(texto) // 2):] if es_par(len(texto)) else texto[-(len(texto) // 2):]
+    mitad2 = (
+        texto[-(len(texto) // 2) :]
+        if es_par(len(texto))
+        else texto[(len(texto) // 2 + 1) :]
+    )
+    mitad2_indice_negativo = (
+        texto[-(len(texto) // 2) :]
+        if es_par(len(texto))
+        else texto[-(len(texto) // 2) :]
+    )
     # va desde la mitad con "-(len(texto) // 2)" (contando desde el final por el indice negativo), hasta el final con ":"
     # print(mitad2)
 
     # Comparar mitades directamente
-    return mitad1 == mitad2_indice_negativo[::-1] 
+    return mitad1 == mitad2_indice_negativo[::-1]
+
 
 # print(palindromo("poop")) # True
 # print(palindromo("acurruca")) # True
 # print(palindromo("ojo")) # True
 # print(palindromo("sometemos")) # True
 
-print(palindromo_gpt("poop")) # True
-print(palindromo_gpt("acurruca")) # True
-print(palindromo_gpt("ojo")) # True
-print(palindromo_gpt("sometemos")) # True
+# print(palindromo_gpt("poop"))  # True
+# print(palindromo_gpt("acurruca"))  # True
+# print(palindromo_gpt("ojo"))  # True
+# print(palindromo_gpt("sometemos"))  # True
 
 # 1.7) Analizar la fortaleza de una contraseña.
 # El parametro de entrada de la funcion sera un string con la contrasena a analizar,
@@ -333,21 +413,56 @@ def analizarPassword(password: str) -> str:
                 return True
         return False
 
-    fortalezaPassword: str = ""
+    # Implementaciones con Python library
+    #  def tieneMinuscula(password: str) -> bool:
+    #   return any(c.islower() for c in password) (devuelve si alguno "any" es minuscula "c.islower()" en el generador "for c in password")
+    #  def tieneMayuscula(password: str) -> bool:
+    #     return any(c.isupper() for c in password)
+    # def tieneNumero(password: str) -> bool:
+    #     return any(c.isdigit() for c in password)
+
+    condicionVerde: bool = len(password) > 8 and tieneMinuscula(password) and tieneMayuscula(password) and tieneNumero(password)
+
     if len(password) < 5:
-        fortalezaPassword = "ROJA"
-    elif (
-        len(password) > 8
-        and tieneMinuscula(password)
-        and tieneMayuscula(password)
-        and tieneNumero(password)
-    ):
-        fortalezaPassword = "VERDE"
+        return "ROJA"
+    elif (condicionVerde):
+        return "VERDE"
     else:
-        fortalezaPassword = "AMARILLA"
+        return "AMARILLA"
 
-    return fortalezaPassword
 
+# P: Es mejor retornar en cada condicion o armar una variable "fortalezaPassword", modificarla en cada condicion y retonar esa variable?
+"""
+R:
+Ambos enfoques son válidos y pueden depender en gran medida de tus preferencias personales y del estilo de programación que prefieras seguir. 
+Sin embargo, hay algunas consideraciones que podrían influir en tu elección:
+
+Retornar en Cada Condición:
+Ventajas:
+    Puede hacer que el código sea más claro y fácil de entender, ya que cada condición tiene su propio retorno y no hay una variable adicional que podría introducir complejidad.
+    Menos propenso a errores, ya que no hay una variable que debe ser manejada y actualizada en cada condición.
+
+Desventajas:
+    Algunas personas pueden argumentar que múltiples retornos pueden hacer que el código sea menos estructurado y más difícil de seguir.
+
+Utilizar una Variable y Retornar al Final:
+Ventajas:
+    Puede ser útil si necesitas realizar más operaciones o lógica antes de decidir el resultado final.
+    Si deseas tener más control sobre el flujo del programa antes de realizar el retorno final.
+
+Desventajas:
+    Puede introducir complejidad innecesaria si la variable se actualiza en múltiples lugares y es difícil de rastrear.
+
+Recomendación:
+En este caso específico, dado que estás tomando decisiones simples basadas en condiciones específicas, 
+la opción de "Retornar en Cada Condición" parece más apropiada. Hace que el código sea más claro y fácil de entender.
+
+Si las operaciones o lógica entre las condiciones fueran más complejas y requirieran un manejo más avanzado de la variable, 
+entonces la opción de "Utilizar una Variable y Retornar al Final" podría ser más adecuada.
+
+Recuerda que la legibilidad y la claridad del código son muy importantes. 
+En última instancia, elige el enfoque que encuentres más claro y que facilite la comprensión del código por parte de otros programadores (o de ti mismo en el futuro).
+"""
 
 # print(analizarPassword("hola")) # ROJA
 # print(analizarPassword("Password1")) # VERDE
@@ -361,30 +476,111 @@ def analizarPassword(password: str) -> str:
 # dinero y “R” para retiro de dinero, y adem´as el monto de cada operaci´on. Por ejemplo, si la lista de tuplas es [(‘‘I’’,
 # 2000), (‘‘R’’, 20),(‘‘R’’, 1000),(‘‘I’’, 300)] entonces el saldo actual es 1280.
 
+def saldo(movimientos: list[tuple[str, int]]) -> int:
+    """
+    Calcula el saldo actual a partir de un historial de movimientos en una cuenta bancaria.
+
+    :param movimientos: Lista de tuplas representando movimientos. Cada tupla tiene una letra que indica el tipo de
+                       movimiento ("I" para ingreso, "R" para retiro) y el monto de la operación.
+    :type movimientos: list[tuple[str, int]]
+
+    :return: El saldo actual después de procesar los movimientos.
+    :rtype: int
+    """
+
+    saldo:int = 0
+
+    def esIngreso(movimiento:str) -> bool: 
+        return movimiento[0] == "I"
+    
+    for movimiento in movimientos:
+        if esIngreso(movimiento):
+            saldo += movimiento[1]
+        else:
+            saldo -= movimiento[1]
+
+    return saldo    
+
 # def saldo(movimiento:[(str), (int)]) -> int:
+# print(saldo([("R", 100), ("I", 50), ("R", 75)])) # -125
+# print(saldo([("R", 100), ("R", 100), ("R", 100)])) # -300
+# print(saldo([("I", 2000), ("R", 20), ("R", 1000), ("I", 300)])) # 1280
 
 
-# Ejercicio 2.
+# 1.9) Recorrer una palabra en formato string y devolver True si esta tiene al menos 3 vocales distintas y False en caso contrario.
+def tiene_al_menos_3_vocales_distintas(palabra: str) -> bool:
+    # Approach 1) 
+    # Filtrar vocales
+    # Para la vocal actual:
+        # Si no esta en una lista de vocales distintas, agregarla    
+    # Repetir
+    # Fuera del loop, contar cantidad de vocales distintas
+
+    def filtrar_vocales(letra: str) -> str:
+        return letra in "aeiou"
+    
+    vocales = list(filter(filtrar_vocales, palabra))
+
+    vocales_distintas: list[str] = []
+    
+    for vocal in vocales:
+        if vocal not in vocales_distintas: 
+            vocales_distintas.append(vocal)
+
+    return len(vocales_distintas) >= 3
+
+
+def tiene_al_menos_3_vocales_distintas_GPT(palabra: str) -> bool:
+    """
+    Verifica si una palabra tiene al menos 3 vocales distintas.
+
+    :param palabra: La palabra a verificar.
+    :type palabra: str
+    :return: True si hay al menos 3 vocales distintas, False en caso contrario.
+    :rtype: bool
+
+    Diferencias:
+    1) Uso de conjuntos: 
+    Puedes utilizar conjuntos (set) para almacenar las vocales distintas en lugar de una lista. 
+    Los conjuntos no permiten elementos duplicados, por lo que automáticamente te aseguras de tener solo vocales únicas.
+
+    2) Uso de funciones integradas: 
+    Puedes aprovechar funciones integradas de Python para simplificar tu código.
+
+    3) Expresiones lamdba: 
+    Una expresión lambda en Python es una forma de crear funciones anónimas o sin nombre. Son útiles cuando necesitas funciones pequeñas y temporales, generalmente para operaciones simples.    
+    """
+
+    # Filtrar las vocales utilizando un conjunto y una funcion anonima lambda
+    vocales = set(filter(lambda letra: letra in "aeiou", palabra))
+    return len(vocales) >= 3
+
+print(tiene_al_menos_3_vocales_distintas("qwrty")) # 0 -> False
+print(tiene_al_menos_3_vocales_distintas("banana")) # 1 -> False
+print(tiene_al_menos_3_vocales_distintas("falopero")) # 3 -> True
+print(tiene_al_menos_3_vocales_distintas("murcielago")) # 5 -> True
+
+
+# ------------
+# Ejercicio 2
+# ------------
 # Implementar las siguientes funciones sobre secuencias pasadas por parametro:
 
 # 2.1) Dada una lista de numeros, en las posiciones pares borra el valor original y coloca un cero.
 # Esta funcion modifica el parametro ingresado, es decir, la lista es un parametro de tipo inout.
 # PARAMETRO INOUT: ingresa, se modifica y luego se utiliza con este nuevo valor (la funcion no retorna nada)
 
-
 def borrarPosicionesParesInOut(lista: "list[int]") -> None:
     for i in range(0, len(lista), 2):
         lista[i] = 0
-
 
 # a:[int]= [1, 2, 3, 4, 5]
 # print(a)
 # borrarPosicionesPares(a)
 # print(a)
 
-# 1.2) Lo mismo del punto anterior pero esta vez sin modificar la lista original, devolviendo una nueva lista, igual a la anterior
+# 2.2) Lo mismo del punto anterior pero esta vez sin modificar la lista original, devolviendo una nueva lista, igual a la anterior
 # pero con las posiciones pares en cero, es decir, la lista pasada como parametro es de tipo in
-
 
 def borrarPosicionesParesIn(lista: "list[int]") -> [int]:
     nuevaLista = lista.copy()
@@ -400,7 +596,7 @@ def borrarPosicionesParesIn(lista: "list[int]") -> [int]:
 # print("b:", b)
 
 
-# 3. Dada una cadena de caracteres devuelva una cadena igual a la anterior, pero sin las vocales.
+# 2.3) Dada una cadena de caracteres devuelva una cadena igual a la anterior, pero sin las vocales.
 # No se agregan espacios, sino que borra la vocal y concatena a continuacion.
 def borrarVocales(palabra: str) -> str:
     palabraSinVocales = ""
@@ -411,16 +607,33 @@ def borrarVocales(palabra: str) -> str:
             palabraSinVocales = palabraSinVocales + (palabra[i])
     return palabraSinVocales
 
-
 # print(borrarVocales("joaquin"))
 # print(borrarVocales("lucas"))
 
 
-# 3.4) problema reemplazaVocales (in s:seq<Char>) : seq<Char> {
+# 2.4) problema reemplazaVocales (in s:seq<Char>) : seq<Char> {
 #   requiere: { T rue }
 #   asegura: {Para todo i ∈ Z, si 0 ≤ i < |res| → (pertenece(<‘a’,‘e’,‘i’,‘o’,‘u’>, s[i]) ∧ res[i] = ‘ ’)
 #             ∨ #   (¬ pertenece(<‘a’,‘e’,‘i’,‘o’,‘u’>, s[i]) ∧ res[i] = s[i] ) ) }
 #   }
+# Reemplaza cada vocal por un guion bajo, y deja el resto de los caracteres intactos
+
+def reemplazar_vocales(palabra: list[str]) -> list[str]:
+    
+    palabraNueva: str = ""
+    vocales: str = "aeiou"
+
+    for letra in palabra:
+        if letra in vocales:
+            palabraNueva += ("_")
+        else:
+            palabraNueva += letra
+
+    return palabraNueva    
+
+print(reemplazar_vocales("joaquin"))
+print(reemplazar_vocales("lucas"))
+
 
 
 # -----------
