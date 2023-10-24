@@ -62,14 +62,30 @@ def contar_apariciones (nombre_archivo: str, palabra: str) -> int:
 
 # Dado un archivo de texto con comentarios, implementar una funcion clonar sin comentarios(in nombre archivo : str)
 # que toma un archivo de entrada y genera un nuevo archivo que tiene el contenido original sin las lıneas comentadas. 
-# Para este ejercicio vamos a considerar comentarios como aquellas l´ıneas que tienen un caracter ‘#’como primer caracter de la l´ınea, o si
+# Para este ejercicio vamos a considerar comentarios como aquellas lıneas que tienen un caracter ‘#’como primer caracter de la lınea, o si
 # no es el primer caracter, se cumple que todos los anteriores son espacios.
 # Ejemplo:
 # # esto es un comentario
 # # esto tambien
 # esto no es un comentario # esto tampoco
 
-# def clonar_sin_comentarios(nombre_archivo : str) -> None:
+def clonar_sin_comentarios(nombre_archivo : str) -> None:
+    archivo = open(nombre_archivo)
+
+    lineas: list[str] = archivo.readlines()
+    archivo_clonado: list[str] = []
+
+    def es_comentario(linea: str) -> bool:
+        return linea.lstrip()[0] == '#'
+
+    for linea in lineas:
+        if not es_comentario(linea):
+            archivo_clonado.append(linea)
+    
+    return archivo_clonado
+
+print(clonar_sin_comentarios("guia8texto.txt"))
+
 
 
 # -----------
