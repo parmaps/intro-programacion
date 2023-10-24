@@ -4,10 +4,64 @@ from queue import LifoQueue as Pila
 import random
 
 
-# 1: ARCHIVOS
+# 1: ARCHIVOS (1 al 7)
+# Que aprendi?
+"""
+-1.2) linea.split(): divide una cadena en una lista de elementos utilizando espacios en blanco como separador por defecto
+ej.: linea = "123,Matemáticas,2023-10-25,90.5" -> ['123,Matemáticas,2023-10-25,90.5']
+
+-2) linea.lstrip(): método de cadenas que elimina espacios en blanco y otros caracteres especificados al principio (izquierda) de una cadena.
+También puedes pasar un argumento a lstrip() para especificar los caracteres que deseas eliminar. 
+Por ejemplo:
+linea = "****¡Hola, mundo!"
+nueva_linea = linea.lstrip("*!") -> print(nueva_linea) -> "Hola, mundo!"
+
+-3) 
+-with open(nombre_archivo) as archivo:
+        lineas = archivo.readlines()
+El uso de with asegura que los archivos se cierren adecuadamente después de su uso. 
+Esto es importante para evitar posibles problemas de manejo de recursos y pérdida de datos.
+Y ademas esta asignandolo a la variable "archivo", y luego leyendo sus lineas.
+KEY: se trabaja dentro del bloque with; cuando se sale de este, el archivo se cierra
+
+-lineas.reverse() -> Revertir el orden de las líneas
+
+-if not linea.endswith('\n'): #chequear si la linea termina con un string en particular
+    linea += '\n' #agregar este caracter
+archivo_revertido.write(linea) 
+
+
+-4)
+-with open(nombre_archivo, "a") as archivo:
+    archivo.write(frase)
+-> abrir el archivo en formato "append" (a): se escribiran lineas al final del archivo
+
+
+-5)
+with open(nombre_archivo, "r+") as archivo:
+    contenido_original = archivo.read()
+    archivo.seek(0)
+    archivo.write(frase + contenido_original)
+r+: Open for reading and writing. The stream is positioned at the beginning of the file.
+archivo.read(): Leer el contenido original del archivo, luego lo almacenamos variable contenido_original.
+archivo.seek(0): Mover el puntero al principio del archivo
+archivo.write(frase + contenido_original): Escribir al archivo primero la frase y luego el contenido_original
+
+
+-6)
+with open(nombre_archivo, "rb") as f:
+    contenido = f.read()
+    for secuencia in contenido:
+        char = chr(secuencia)
+rb: read mode + binary mode
+Al hacer read() vamos a obtener una secuencia de bytes, que al hacer chr(byte) {aca chr(secuencia)} 
+nos va a devolver un caracter correspondiente al byte leido.
+
+"""
+
 
 # -----------
-# Ejercicio 1 OK
+# Ejercicio 1 OK 23/10
 # -----------
 
 # Ejercicio 1. Implementar en Python:
@@ -37,8 +91,8 @@ def existe_palabra (palabra: str, nombre_archivo: str) -> bool:
 
     return False
 
-# print(existe_palabra("linea", "ejemplomapi.txt")) # False
-# print(existe_palabra("lineas", "ejemplomapi.txt")) # True
+# print(existe_palabra("qe", "guia8texto.txt")) # False
+# print(existe_palabra("tal", "guia8texto.txt")) # True
 
 
 # 1.3 Una funcion cantidad apariciones(in nombre archivo : str, in palabra : str) → int 
@@ -57,7 +111,7 @@ def contar_apariciones (nombre_archivo: str, palabra: str) -> int:
 
 
 # -----------
-# Ejercicio 2 TO-DO
+# Ejercicio 2 OK 24/10
 # -----------
 
 # Dado un archivo de texto con comentarios, implementar una funcion clonar sin comentarios(in nombre archivo : str)
@@ -84,12 +138,12 @@ def clonar_sin_comentarios(nombre_archivo : str) -> None:
     
     return archivo_clonado
 
-print(clonar_sin_comentarios("guia8texto.txt"))
+# print(clonar_sin_comentarios("guia8texto.txt"))
 
 
 
 # -----------
-# Ejercicio 3 OK
+# Ejercicio 3 OK 23/10, corregido 24/10
 # -----------
 # Dado un archivo de texto, implementar una funcion que escribe un archivo nuevo llamado reverso.txt que tiene
 # las mismas lıneas que el original, pero en el orden inverso.
@@ -123,15 +177,157 @@ def revertir_archivo(nombre_archivo: str) -> None:
     
     for linea in archivo_revertido_contenido:
         destino.write(linea) 
+
+
+
+def revertir_archivo_corregido(nombre_archivo: str) -> None:
+    """
+    Esta implementacion es mejor por las siguientes razones:
+    -Utiliza un administrador de contexto (with): El uso de with asegura que los archivos se cierren adecuadamente después de su uso. 
+    Esto es importante para evitar posibles problemas de manejo de recursos y pérdida de datos.
+
+    -Simplifica el proceso: En lugar de manipular índices y crear una lista separada para las líneas revertidas, 
+    simplemente usamos el método reverse() para invertir la lista de líneas original. 
+    Esto hace que el código sea más claro y menos propenso a errores.
+
+    -Manejo adecuado del carácter de nueva línea: Mi implementación verifica si cada línea original tiene un carácter de nueva línea al final y, 
+    si no lo tiene, lo agrega antes de escribir la línea en el archivo "reverso.txt". 
+    Esto evita que la primera línea del archivo resultante se pegue a la segunda línea.
+    """
+    with open(nombre_archivo) as archivo:
+        lineas = archivo.readlines()
+
+    # Revertir el orden de las líneas
+    lineas.reverse()
+
+    archivo_revertido_nombre = "reverso.txt"
+    with open(archivo_revertido_nombre, "w") as archivo_revertido:
+        for linea in lineas:
+            if not linea.endswith('\n'):
+                linea += '\n'
+            archivo_revertido.write(linea)    
+
+# revertir_archivo("guia8texto.txt")
+# revertir_archivo_corregido("guia8texto.txt")
+
+
+# -----------
+# Ejercicio 4 OK 24/10
+# -----------
+
+# Dado un archivo de texto y una frase, 
+# implementar una funcion que la agregue al final del archivo original (sin hacer una copia)
+
+def agregar_frase(nombre_archivo: str, frase: str) -> None:
+    with open(nombre_archivo, "a") as archivo:
+        archivo.write(frase)
     
+# agregar_frase("guia8texto.txt", "\nyo se que estas ahi")
 
-# revertir_archivo("ejemplomapi.txt")
 
+# -----------
+# Ejercicio 5 OK 24/10 (solucion buscada en GPT)
+# -----------
+# Idem, pero agregando la frase al comienzo del archivo original (de nuevo, sin hacer una copia del archivo).
+def agregar_frase_al_comienzo(nombre_archivo: str, frase: str) -> None:
+    """
+    Esta función abre el archivo especificado en modo lectura/escritura ("r+"), 
+    lee el contenido original del archivo, y agrega la frase proporcionada al principio del archivo. 
+    El archivo original se modifica directamente.
+
+    Funcionamiento:
+    r+: Open for reading and writing. The stream is positioned at the beginning of the file.
+    archivo.read(): Leer el contenido original del archivo, luego lo almacenamos variable contenido_original.
+    archivo.seek(0): Mover el puntero al principio del archivo
+    """
+    with open(nombre_archivo, "r+") as archivo:
+        contenido_original = archivo.read()
+        archivo.seek(0)  # Mover el puntero al principio del archivo
+        archivo.write(frase + contenido_original)
+
+# agregar_frase_al_comienzo("guia8texto.txt", "quiero conocerte cambiarias un poquito de mi suerte\n")
+
+
+# -----------
+# Ejercicio 6 OK 24/10 - interesante
+# -----------
+
+# Implementar una funcion que lea un archivo en modo binario y devuelva la lista de palabras legibles, 
+# donde vamos a definir una palabra legible como:
+# secuencias de texto formadas por numeros, letras mayusculas/minusculas y los caracteres ‘ ’(espacio) y ‘_’(guion bajo)
+# que tienen longitud >= 5
+# Una vez implementada la funci´on, probarla con diferentes archivos binarios (.exe, .zip, .wav, .mp3, etc).
+# Referencia: https://docs.python.org/es/3/library/functions.html#open
+# Para resolver este ejercicio se puede abrir un archivo en modo binario ‘b’. Al hacer read() vamos a obtener
+# una secuencia de bytes, que al hacer chr(byte) nos va a devolver un caracter correspondiente al byte leıdo.
+
+def palabras_legibles(nombre_archivo: str) -> list[str]:
+
+    def es_caracter_legible(char: str) -> bool:
+        return char.isalnum() or char == ' ' or char == '_'
+    
+    palabra: str = ""
+    palabras_legibles: list[str] = []
+
+    with open(nombre_archivo, "rb") as f:
+        contenido = f.read()
+        for secuencia in contenido:
+            char = chr(secuencia)
+            if es_caracter_legible(char):
+                palabra += char
+            else:
+                if len(palabra) >= 5: 
+                    palabras_legibles.append(palabra)
+                palabra = ""
+    
+    return palabras_legibles
+
+
+# print(palabras_legibles("guia8texto.txt"))
+# print(palabras_legibles("t10.pdf"))
+# print(palabras_legibles("t10.zip"))
+# print(palabras_legibles("gheist.mp3"))
+
+
+# -----------
+# Ejercicio 7 OK 24/10 interesante
+# -----------
+# Implementar una funcion que lea un archivo de texto separado por comas (comma-separated values, o .csv) 
+# que contiene las notas de toda la carrera de un grupo de alumnos y calcule el promedio final de un alumno dado. 
+# La funcion es promedioEstudiante(in lu : str) → float. 
+# El archivo tiene el siguiente formato:
+# nro de LU ( str ) , materia ( str ) , fecha ( str ) , nota ( float )
+def promedio_estudiante(num_libreta : str) -> float:
+
+    def extraer_notas(lineas: list[str]) -> list[float]:
+        notas: list[int] = []
+        for linea in lineas:
+            palabras: list[str] = linea.split()
+            libreta_en_archivo: str = palabras[0].replace(",", "")
+            if num_libreta == libreta_en_archivo:
+                nota = palabras[-1]
+                notas.append(float(nota))
+        return notas
+
+    def promediar(notas: list[float]) -> float:
+        return round(sum(notas) / len(notas), 2)
+
+    archivo_notas_alumnos = "notas.csv"
+    with open(archivo_notas_alumnos) as libreta:
+        # Leer contenido
+        contenido = libreta.readlines()
+        notas = extraer_notas(contenido)
+        return promediar(notas)
+
+
+# print(promedio_estudiante("869/12")) # 7.38
+# print(promedio_estudiante("869/13")) # 7.5
+# print(promedio_estudiante("868/12")) # 9.0
 
 # 2: PILAS (8 al 12) (falta 9, 11, 12)
 
 # -----------
-# Ejercicio 8 OK
+# Ejercicio 8 OK 23/10
 # -----------
 
 # Implementar una funcion generar nros al azar(in n : int, in desde : int, in hasta : int) → pila 
@@ -153,7 +349,21 @@ def generar_nums_azar(n: int, desde: int, hasta: int) -> Pila:
     return p
 
 
-generar_nums_azar(5, 10, 11)
+# generar_nums_azar(5, 10, 11)
+
+
+# ------------
+# Ejercicio 9 OK
+# ------------
+# Implementar una funcion cantidad elementos(in p : pila) → int 
+# que, dada una pila, cuente y devuelva la can tidad de elementos que contiene. 
+# No se puede utilizar la funicion LifoQueue.qsize(). 
+# Si se usa get() para recorrer la pila, esto modifica el parametro de entrada. 
+# Y como la especificacion dice que es de tipo in hay que restaurarla.
+
+
+
+
 
 # ------------
 # Ejercicio 10 OK
