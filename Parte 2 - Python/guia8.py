@@ -70,6 +70,10 @@ PILAS
 
 """
 
+"""
+COLAS: terminados 26/10, pendiente agregar al 26/10
+"""
+
 # 1: ARCHIVOS (1 al 7)
 # -----------
 # Ejercicio 1 OK 23/10
@@ -907,6 +911,97 @@ cola17.put((7, "Curry", "Traumatologia"))
 # print(cola17.queue)
 
 # print("cantidad de pacientes urgentes:", n_pacientes_urgentes(cola17))
+
+# ------------
+# Ejercicio 19 OK 26/10
+# ------------
+
+"""
+La gerencia de un banco nos pide modelar la atención de los clientes usando una cola 
+donde se van registrando los pedidos de atención. Cada vez que ingresa una persona a la entidad, 
+debe completar sus datos en una pantalla que está a la entrada: Nombre y Apellido, DNI, tipo de cuenta 
+(si es preferencial o no) y si tiene prioridad por ser adulto +65, embarazada o con movilidad reducida (prioridad si o no).
+La atención a los clientes se da por el siguiente orden: primero las personas que tienen prioridad, 
+luego las que tienen cuenta bancaria preferencial y por último el resto. 
+Dentro de cada subgrupo de clientes, se respeta el orden de llegada.
+1. Dar una especificación para el problema planteado.
+2. Implementar en Python la función 
+a_clientes(in c : Cola[(str, int, bool, bool)]) → Cola[(str, int, bool, bool)] 
+que dada la cola de ingreso de clientes al banco devuelve la cola en la que van a ser atendidos.
+"""
+
+
+def orden_atencion(cola: Cola) -> Cola:
+    """
+    Args:
+    Cola de ingreso de clientes al banco
+    -> Cola[(str, int, bool, bool)] = Cola[(nombre_y_apellido, DNI, es_preferencial, es_prioritario)]
+
+
+    Return:
+    Cola en el el orden en que van a ser atendidos.
+    -> Cola[(str, int, bool, bool)] = Cola[(nombre_y_apellido, DNI, es_preferencial, es_prioritario)]
+    """
+    print("\ncola original:", cola.queue)
+    cola_aux: Cola = Cola()
+    cola_ordenada: Cola = Cola()
+    cola_no_prioritarios: Cola = Cola()
+    cola_resto_clientes: Cola = Cola()
+
+    # Pasar clientes a la cola auxiliar, para poder restaurar la cola original
+    while not cola.empty():
+        cliente = cola.get()
+        cola_aux.put(cliente)
+
+    # Encolar clientes prioritarios
+    while not cola_aux.empty():
+        cliente = cola_aux.get()
+        cola.put(cliente) #  Restaurar cola original
+        es_prioritario = cliente[3]
+        if es_prioritario:
+            cola_ordenada.put(cliente)
+        else:
+            cola_no_prioritarios.put(cliente) 
+
+    # Encolar clientes preferenciales
+    while not cola_no_prioritarios.empty():
+        cliente = cola_no_prioritarios.get()
+        es_preferencial = cliente[2]
+        if es_preferencial:
+            cola_ordenada.put(cliente)
+        else:
+            cola_resto_clientes.put(cliente)
+
+    # Encolar el resto de clientes
+    while not cola_resto_clientes.empty():
+        cliente = cola_resto_clientes.get()
+        cola_ordenada.put(cliente)
+
+ 
+    # print("\ncola original:", cola.queue)
+    # print("\ncola ordenada:", cola_ordenada.queue)
+    return cola_ordenada
+
+cola18 = Cola()
+clientes: list[(str, int, bool, bool)] = [
+    ("Juen", 1, True, False),
+    ("Rami", 2, True, True),
+    ("Peluca", 3, False, False),
+    ("Perro", 4, False, True),
+    ("Roman", 5, True, False),
+    ("Mapi", 6, False, False),
+    ("Mex", 7, True, True),
+    ("Curry", 8, True, False),
+    ("Lio", 9, False, True),
+]
+for cliente in clientes:
+    cola18.put(cliente)
+# Orden deberia ser: 
+# Rami, Perro, Mex, Lio (prioritarios)  _ True
+# Juen, Roman, Curry (preferenciales)   True False
+# Peluca, Mapi (resto)                  False False
+
+print("\ncola ordenada:", orden_atencion(cola18).queue)
 
 
 # 4: DICCIONARIOS (19 al 23) (falta 20 - 23)
