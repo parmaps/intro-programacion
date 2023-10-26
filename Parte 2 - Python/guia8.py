@@ -385,11 +385,14 @@ def generar_nums_azar(n: int, desde: int, hasta: int) -> Pila:
 # Y como la especificacion dice que es de tipo in hay que restaurarla.
 def cantidad_elementos(p: Pila) -> int:
     total_elems = 0
+    pila_aux = Pila()
+
     p.put(1)
     p.put(2)
     p.put(4)
     p.put(8)
-    pila_aux = Pila()
+    print(p.queue)
+
     while not p.empty():
         elem = p.get()
         pila_aux.put(elem)
@@ -403,8 +406,8 @@ def cantidad_elementos(p: Pila) -> int:
     return total_elems
 
 
-# pila9 = Pila()
-# print(cantidad_elementos(cola9))
+pila9 = Pila()
+# print(cantidad_elementos(pila9))
 
 
 # ------------
@@ -598,6 +601,7 @@ resultado = evaluar_expresion(expresion)
 print(resultado) # Deberia devolver 33
 """
 
+
 def evaluar_expresion_postfix(expresion: str) -> int:
     pila: Pila = Pila()
 
@@ -622,7 +626,7 @@ def evaluar_expresion_postfix(expresion: str) -> int:
         if char.isnumeric():
             # print("es operando:", char)
             pila.put(char)
-        # Si es un operador 
+        # Si es un operador
         elif es_operacion(char):
             # print("es operador", char)
             # print("tamanio pila:", pila.qsize(), "; pila:", pila.queue, "\n")
@@ -633,7 +637,7 @@ def evaluar_expresion_postfix(expresion: str) -> int:
 
             # aplicarles el operador y colocar el resultado en la pila
             resultado = aplicar_operacion(char, operando1, operando2)
-            print(resultado,  "\n") 
+            print(resultado, "\n")
             pila.put(resultado)
 
     return pila.get()
@@ -644,18 +648,19 @@ def evaluar_expresion_postfix(expresion: str) -> int:
 # print(evaluar_expresion_postfix("5 1 2 + 4 * + 3 -")) # 14
 
 
-# 3: COLAS (13 al 18) (falta 14 - 18)
+# 3: COLAS (13 al 18) (falta 17 - 18)
 
 # ------------
-# Ejercicio 13 25/10
+# Ejercicio 13 OK 25/10
 # ------------
-# Usando la funcion generar nros al azar() definida en la seccion anterior, 
-# implementar una funcion que arme una cola de enteros con los numeros generados al azar. 
+# Usando la funcion generar nros al azar() definida en la seccion anterior,
+# implementar una funcion que arme una cola de enteros con los numeros generados al azar.
 # Pueden usar la clase Queue() que es un ejemplo de una implementacion basica:
 # c = Cola ()
 # c . put (1) # encolar
 # elemento = c . get () # desencolar ()
 # c . empty () # vacia ?
+
 
 def generar_nros_al_azar_cola(n: int, desde: int, hasta: int) -> Cola:
     pila_nros_azar = generar_nums_azar(n, desde, hasta)
@@ -666,12 +671,243 @@ def generar_nros_al_azar_cola(n: int, desde: int, hasta: int) -> Cola:
     while not pila_nros_azar.empty():
         num = pila_nros_azar.get()
         cola.put(num)
-    
+
     print(cola.queue)
     return cola
 
 
-generar_nros_al_azar_cola(5, 1,10)
+# generar_nros_al_azar_cola(5, 1,10)
+
+
+# ------------
+# Ejercicio 14 OK 25/10
+# ------------
+
+
+# Implementar una funcion cantidad elementos(in c : cola) → int
+# que, dada una cola, cuente y devuelva la cantidad de elementos que contiene.
+# Comparar con la version usando pila. No se puede utilizar la funcion Queue.qsize()
+def cantidad_elementos_cola(cola: Cola) -> int:
+    total_elems: int = 0
+    cola_aux: Cola = Cola()
+
+    print(cola.queue)
+
+    while not cola.empty():
+        elem = cola.get()
+        print(elem)
+        total_elems += 1
+        cola_aux.put(elem)
+
+    while not cola_aux.empty():
+        elem = cola_aux.get()
+        cola.put(elem)
+
+    print("cola aux:", cola_aux.queue)
+    print(cola.queue)
+
+    return total_elems
+
+
+cola14 = Cola()
+cola14.put(1)
+cola14.put(2)
+cola14.put(3)
+cola14.put(4)
+cola14.put(5)
+# print(cantidad_elementos_cola(cola14))
+
+
+# ------------
+# Ejercicio 15 OK 25/10
+# ------------
+# Dada una cola de enteros, implementar una funcion buscar el maximo(in c : cola) → int
+# que devuelva el maximo elemento. Comparar con la version usando pila.
+def buscar_maximo_cola(cola: Cola) -> int:
+    print("cola original:", cola.queue)
+
+    # Definir el primer numero como el maximo
+    maximo: int = cola.get()
+
+    # Crear cola auxiliar y agregar el primer numero
+    cola_aux: Cola = Cola()
+    cola_aux.put(maximo)
+
+    # Mientras cola tenga elementos, sacar el primero, compararlo con el maximo y redefinir el maximo si corresponde
+    while not cola.empty():
+        actual: int = cola.get()
+        cola_aux.put(actual)
+        if maximo < actual:
+            maximo = actual
+
+    # Restaurar la cola original
+    while not cola_aux.empty():
+        elem: int = cola_aux.get()
+        cola.put(elem)
+
+    print("cola original:", cola.queue)
+
+    return maximo
+
+
+# Crear y llenar la cola
+cola15 = Cola()
+cola15.put(20)
+cola15.put(10)
+cola15.put(2)
+cola15.put(101)
+# print(buscar_maximo_cola(cola15))
+
+
+# ------------
+# Ejercicio 16 OK 26/10
+# ------------
+# Bingo: un carton de bingo contiene 12 numeros al azar en el rango [0, 99]
+
+# 16.1)
+# Implementar una funcion armar secuencia de bingo() → Cola[int]
+# que genere una cola con los numeros del 0 al 99 ordenados al azar.
+
+
+def armar_secuencia_de_bingo() -> Cola:
+    """
+    Esta función devuelve una cola que contiene números enteros para un juego de bingo.
+    """
+    cola = Cola()
+    # numeros = [x for x in range(99)]
+    numeros = [x for x in range(100)]
+    random.shuffle(numeros)  # ordenar aleatoriamente la lista de numeros
+    for numero in numeros:
+        cola.put(numero)
+
+    return cola
+
+
+# print(armar_secuencia_de_bingo().queue)
+
+# 16.2)
+# Implementar una funcion jugar carton de bingo(in carton : list[int], in bolillero : cola[int]) → int
+# que toma un carton de Bingo y una cola de enteros (que corresponden a las bolillas numeradas)
+# y determina cual es la cantidad de jugadas de ese bolillero que se necesitan para ganar.
+
+
+def jugar_carton_de_bingo(carton: list[int], bolillero: Cola) -> int:
+    """
+    Esta funcion toma un carton de bingo y una cola de enteros (que corresponden a las bolillas numeradas) y determina cual es la cantidad de jugadas de ese bolillero que se necesitan para ganar.
+
+    Args:
+    carton: list[int]
+    bolillero: Cola[int]
+
+    Retorna:
+    cantidad_de_jugadas: int
+    """
+
+    cantidad_de_jugadas = 0
+    print("carton de bingo:", carton)
+    print("bolillero:", bolillero.queue)
+
+    # Variables para evitar modificar los parametros in
+    carton_copy = carton.copy()
+    bolillero_copy = Cola()
+
+    # Contar cantidad de jugadas y mientras ir copiando el bolillero
+    while len(carton_copy) > 0:  # Itero por el bolillero y saco un numero
+        numero_bolillero: int = bolillero.get()
+        bolillero_copy.put(numero_bolillero)
+        cantidad_de_jugadas += 1
+        for numero in carton_copy:
+            if numero == numero_bolillero:
+                carton_copy.remove(numero)
+                break
+        # print("carton_copy", carton)
+
+    # Si quedaron numeros en el bolillero original, extraerlos y enviarlos a la copia
+    while not bolillero.empty():
+        numero_bolillero = bolillero.get()
+        bolillero_copy.put(numero_bolillero)
+
+    # Restaurar el bolillero original
+    while not bolillero_copy.empty():
+        numero_bolillero = bolillero_copy.get()
+        bolillero.put(numero_bolillero)
+
+    print("carton al final:", carton, "\n")
+    print("bolillero al final:", bolillero.queue, "\n")
+    print("bolillero copy al final:", bolillero_copy.queue, "\n")
+
+    return cantidad_de_jugadas
+
+
+# Generar lista de 12 numeros aleatorios entre 0 inclusive y 100 no inclusive
+# Con este metodo pueden repetirse
+carton_bingo_repetidos: list[int] = [random.randint(0, 100) for _ in range(12)]
+
+# Con este metodo no se repiten, usando un while loop
+carton_bingo_no_repetidos_while: list[int] = []
+while len(carton_bingo_no_repetidos_while) < 12:
+    numero = random.randint(0, 100)
+    if numero not in carton_bingo_no_repetidos_while:
+        carton_bingo_no_repetidos_while.append(numero)
+
+# Carton manual para testeo
+carton_bingo_manual: list[int] = [0, 1, 2]
+
+# jugar_carton_de_bingo(carton_bingo_manual, armar_secuencia_de_bingo()) # version manual
+# print("cantidad de jugadas para ganar:", jugar_carton_de_bingo(carton_bingo_no_repetidos_while, armar_secuencia_de_bingo())) # version random
+
+
+# ------------
+# Ejercicio 17 OK 26/10
+# ------------
+"""
+Vamos a modelar una guardia de un hospital usando una cola donde se van almacenando 
+los pedidos de atención para los pacientes que van llegando. A cada paciente 
+se le asigna una prioridad del 1 al 10 (donde la prioridad 1 es la mas urgente
+y requiere atención inmediata) junto con su nombre y la especialidad medica que le corresponde.
+Implementar la función n_pacientes_urgentes(in c : Cola[(int, str, str)]) → int 
+que devuelve la cantidad de pacientes de la cola que tienen prioridad en el rango [1, 3].
+"""
+
+
+def n_pacientes_urgentes(cola: Cola) -> int:
+    """
+    Args: Cola[(int, str, str)] = Cola[(prioridad, nombre, especialidad)]
+    Return: int = cantidad de pacientes de la cola que tienen prioridad en el rango [1, 3]
+    """
+    cantidad_de_pacientes_urgentes: int = 0
+    # print("\ncola inicial:", cola.queue)
+    cola_aux = Cola()
+
+    while not cola.empty():
+        paciente: (int, str, str) = cola.get()
+        cola_aux.put(paciente)
+        prioridad_actual: int = paciente[0]
+        if prioridad_actual <= 3:
+            cantidad_de_pacientes_urgentes += 1
+
+    while not cola_aux.empty():
+        paciente: (int, str, str) = cola_aux.get()
+        cola.put(paciente)
+
+    # print("\ncola final:", cola.queue)
+
+    return cantidad_de_pacientes_urgentes
+
+
+cola17 = Cola()
+paciente_1 = (1, "Juen", "Cardiologia")
+cola17.put(paciente_1)
+cola17.put((2, "Ramiro", "Otorrino"))
+cola17.put((3, "Tomas", "Traumatologia"))
+cola17.put((4, "Peluca", "Insomnio"))
+cola17.put((5, "Mapi", "Ansiedad"))
+cola17.put((6, "Roman", "Traumatologia"))
+cola17.put((7, "Curry", "Traumatologia"))
+# print(cola17.queue)
+
+# print("cantidad de pacientes urgentes:", n_pacientes_urgentes(cola17))
+
 
 # 4: DICCIONARIOS (19 al 23) (falta 20 - 23)
 # ------------
