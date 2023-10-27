@@ -350,7 +350,7 @@ def promedio_estudiante(num_libreta: str) -> float:
 # print(promedio_estudiante("869/13")) # 7.5
 # print(promedio_estudiante("868/12")) # 9.0
 
-# 2: PILAS (8 al 12) (falta 12)
+# 2: PILAS (8 al 12) OK 25/10
 
 # -----------
 # Ejercicio 8 OK 23/10
@@ -652,7 +652,7 @@ def evaluar_expresion_postfix(expresion: str) -> int:
 # print(evaluar_expresion_postfix("5 1 2 + 4 * + 3 -")) # 14
 
 
-# 3: COLAS (13 al 18) (falta 17 - 18)
+# 3: COLAS (13 al 18) OK 26/10
 
 # ------------
 # Ejercicio 13 OK 25/10
@@ -913,7 +913,7 @@ cola17.put((7, "Curry", "Traumatologia"))
 # print("cantidad de pacientes urgentes:", n_pacientes_urgentes(cola17))
 
 # ------------
-# Ejercicio 19 OK 26/10
+# Ejercicio 18 OK 26/10
 # ------------
 
 """
@@ -929,7 +929,6 @@ Dentro de cada subgrupo de clientes, se respeta el orden de llegada.
 a_clientes(in c : Cola[(str, int, bool, bool)]) → Cola[(str, int, bool, bool)] 
 que dada la cola de ingreso de clientes al banco devuelve la cola en la que van a ser atendidos.
 """
-
 
 def orden_atencion(cola: Cola) -> Cola:
     """
@@ -1001,12 +1000,13 @@ for cliente in clientes:
 # Juen, Roman, Curry (preferenciales)   True False
 # Peluca, Mapi (resto)                  False False
 
-print("\ncola ordenada:", orden_atencion(cola18).queue)
+# print("\ncola ordenada:", orden_atencion(cola18).queue)
+
 
 
 # 4: DICCIONARIOS (19 al 23) (falta 20 - 23)
 # ------------
-# Ejercicio 19 OK
+# Ejercicio 19 OK 23/10
 # ------------
 # Para esta seccion vamos a usar el tipo dict que nos provee python
 # Leer un archivo de texto y agrupar la cantidad de palabras de acuerdo a su longitud.
@@ -1043,7 +1043,45 @@ def agrupar_por_longitud(nombre_archivo: str) -> dict:
     for linea in lineas:
         lista_gigante_de_palabras.append(linea.split(" "))
 
+    archivo.close()
+
     return dict_longitudes
 
 
 # print(agrupar_por_longitud("ejemplomapi.txt"))
+
+# ------------
+# Ejercicio 20 OK
+# ------------
+# Volver a implementar la función que calcula el promedio de las notas de los alumnos, 
+# pero ahora devolver un # diccionario {libreta universitaria : promedio} 
+# con los promedios de todos los alumnos.
+def promedio_estudiantes(nombre_archivo_notas: str) -> dict[str, float]:
+
+    notas_por_alumno: dict[str, list[float]] = dict()
+    
+    with open(nombre_archivo_notas) as archivo:
+        lineas = archivo.readlines()
+
+        for linea in lineas:
+            libreta:str = linea.split()[0].replace(",", "")
+            print("libreta:", libreta)
+            nota:float = float(linea.split()[-1])
+            print("libreta:", nota)
+
+            if libreta not in notas_por_alumno.keys():
+                notas_por_alumno[libreta] = [nota]
+            else:
+                notas_por_alumno[libreta].append(nota)
+
+    promedio_por_alumno: dict[str, float] = dict()
+
+    def calcular_promedio(notas: list[float]) -> float:
+        return sum(notas) / len(notas)
+
+    for key in notas_por_alumno:
+        promedio_por_alumno[key] = calcular_promedio(notas_por_alumno[key])
+    
+    return promedio_por_alumno
+
+print(promedio_estudiantes("notas.csv"))
