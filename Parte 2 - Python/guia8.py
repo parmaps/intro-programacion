@@ -1004,7 +1004,7 @@ for cliente in clientes:
 
 
 
-# 4: DICCIONARIOS (19 al 23) (falta 20 - 23)
+# 4: DICCIONARIOS (19 al 23) (falta 22 - 23)
 # ------------
 # Ejercicio 19 OK 23/10
 # ------------
@@ -1051,7 +1051,7 @@ def agrupar_por_longitud(nombre_archivo: str) -> dict:
 # print(agrupar_por_longitud("ejemplomapi.txt"))
 
 # ------------
-# Ejercicio 20 OK
+# Ejercicio 20 OK 27/10
 # ------------
 # Volver a implementar la función que calcula el promedio de las notas de los alumnos, 
 # pero ahora devolver un # diccionario {libreta universitaria : promedio} 
@@ -1084,4 +1084,64 @@ def promedio_estudiantes(nombre_archivo_notas: str) -> dict[str, float]:
     
     return promedio_por_alumno
 
-print(promedio_estudiantes("notas.csv"))
+# print(promedio_estudiantes("notas.csv"))
+
+
+# ------------
+# Ejercicio 21 OK 27/10
+# ------------
+
+# Implementar la función la palabra mas frecuente(in nombre archivo : str) → str 
+# que devuelve la palabra que más veces aparece en un archivo de texto. 
+# Se aconseja utilizar un diccionario de palabras para resolver el problema.
+
+def palabra_mas_frecuente(nombre_archivo_palabras: str) -> str:
+    with open(nombre_archivo_palabras) as archivo:
+        lineas:list[str] = archivo.readlines()
+
+        frecuencia_palabras: dict[str, int] = {}
+
+        for linea in lineas:
+            for palabra in linea.split():
+                palabra = palabra.replace(",", "")
+                if palabra not in frecuencia_palabras.keys():
+                    frecuencia_palabras[palabra] = 1
+                else:
+                    frecuencia_palabras[palabra] += 1
+
+        frecuencia_maxima: int = 0
+        palabra_mayor_frecuencia: str = ""
+
+        for key, item in frecuencia_palabras.items():
+            if item > frecuencia_maxima:
+                frecuencia_maxima = item
+                palabra_mayor_frecuencia = key
+            
+    return palabra_mayor_frecuencia
+
+
+# (print("la palabra mas frecuente es", palabra_mas_frecuente("palabras_frecuentes.txt")))
+
+# ------------
+# Ejercicio 22 27/10
+# ------------
+
+"""
+Nos piden desarrollar un navegador web muy simple que debe llevar un registro de los sitios web visitados por los
+usuarios del sistema. El navegador debe permitir al usuario navegar hacia atrás y hacia adelante en la historia de navegación.
+1. Crea un diccionario llamado historiales que almacenará el historial de navegación para cada usuario. Las claves del
+diccionario serán los nombres de usuario y los valores serán pilas.
+2. Implementa una función llamada visitar sitio(historiales, usuario, sitio) que reciba el diccionario de historiales,
+el nombre de usuario y el sitio web visitado. La función debe agregar el sitio web al historial del usuario correspondiente.
+3. Implementa una función llamada navegar atras(historiales, usuario) que permita al usuario navegar hacia atrás en
+la historia de navegación. Esto implica sacar el sitio web más reciente del historial del usuario.
+4. Implementa una función llamada navegar adelante(historiales, usuario) que permita al usuario navegar hacia ade-
+lante en la historia de navegación. Esto implica volver a agregar el sitio web previamente sacado.
+Ejemplo de uso:
+historiales = {}
+visitar_sitio(historiales, "Usuario1", "google.com")
+visitar_sitio(historiales, "Usuario1", "facebook.com")
+navegar_atras(historiales, "Usuario1")
+visitar_sitio(historiales, "Usuario2", "youtube.com")
+navegar_adelante(historiales, "Usuario1")
+"""
