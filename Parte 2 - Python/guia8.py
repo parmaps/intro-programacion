@@ -930,6 +930,7 @@ a_clientes(in c : Cola[(str, int, bool, bool)]) → Cola[(str, int, bool, bool)]
 que dada la cola de ingreso de clientes al banco devuelve la cola en la que van a ser atendidos.
 """
 
+
 def orden_atencion(cola: Cola) -> Cola:
     """
     Args:
@@ -955,12 +956,12 @@ def orden_atencion(cola: Cola) -> Cola:
     # Encolar clientes prioritarios
     while not cola_aux.empty():
         cliente = cola_aux.get()
-        cola.put(cliente) #  Restaurar cola original
+        cola.put(cliente)  #  Restaurar cola original
         es_prioritario = cliente[3]
         if es_prioritario:
             cola_ordenada.put(cliente)
         else:
-            cola_no_prioritarios.put(cliente) 
+            cola_no_prioritarios.put(cliente)
 
     # Encolar clientes preferenciales
     while not cola_no_prioritarios.empty():
@@ -976,10 +977,10 @@ def orden_atencion(cola: Cola) -> Cola:
         cliente = cola_resto_clientes.get()
         cola_ordenada.put(cliente)
 
- 
     # print("\ncola original:", cola.queue)
     # print("\ncola ordenada:", cola_ordenada.queue)
     return cola_ordenada
+
 
 cola18 = Cola()
 clientes: list[(str, int, bool, bool)] = [
@@ -995,7 +996,7 @@ clientes: list[(str, int, bool, bool)] = [
 ]
 for cliente in clientes:
     cola18.put(cliente)
-# Orden deberia ser: 
+# Orden deberia ser:
 # Rami, Perro, Mex, Lio (prioritarios)  _ True
 # Juen, Roman, Curry (preferenciales)   True False
 # Peluca, Mapi (resto)                  False False
@@ -1003,8 +1004,7 @@ for cliente in clientes:
 # print("\ncola ordenada:", orden_atencion(cola18).queue)
 
 
-
-# 4: DICCIONARIOS (19 al 23) (falta 22 - 23)
+# 4: DICCIONARIOS (19 al 23) (falta 23)
 # ------------
 # Ejercicio 19 OK 23/10
 # ------------
@@ -1050,23 +1050,23 @@ def agrupar_por_longitud(nombre_archivo: str) -> dict:
 
 # print(agrupar_por_longitud("ejemplomapi.txt"))
 
+
 # ------------
 # Ejercicio 20 OK 27/10
 # ------------
-# Volver a implementar la función que calcula el promedio de las notas de los alumnos, 
-# pero ahora devolver un # diccionario {libreta universitaria : promedio} 
+# Volver a implementar la función que calcula el promedio de las notas de los alumnos,
+# pero ahora devolver un # diccionario {libreta universitaria : promedio}
 # con los promedios de todos los alumnos.
 def promedio_estudiantes(nombre_archivo_notas: str) -> dict[str, float]:
-
     notas_por_alumno: dict[str, list[float]] = dict()
-    
+
     with open(nombre_archivo_notas) as archivo:
         lineas = archivo.readlines()
 
         for linea in lineas:
-            libreta:str = linea.split()[0].replace(",", "")
+            libreta: str = linea.split()[0].replace(",", "")
             print("libreta:", libreta)
-            nota:float = float(linea.split()[-1])
+            nota: float = float(linea.split()[-1])
             print("libreta:", nota)
 
             if libreta not in notas_por_alumno.keys():
@@ -1081,8 +1081,9 @@ def promedio_estudiantes(nombre_archivo_notas: str) -> dict[str, float]:
 
     for key in notas_por_alumno:
         promedio_por_alumno[key] = calcular_promedio(notas_por_alumno[key])
-    
+
     return promedio_por_alumno
+
 
 # print(promedio_estudiantes("notas.csv"))
 
@@ -1091,13 +1092,14 @@ def promedio_estudiantes(nombre_archivo_notas: str) -> dict[str, float]:
 # Ejercicio 21 OK 27/10
 # ------------
 
-# Implementar la función la palabra mas frecuente(in nombre archivo : str) → str 
-# que devuelve la palabra que más veces aparece en un archivo de texto. 
+# Implementar la función la palabra mas frecuente(in nombre archivo : str) → str
+# que devuelve la palabra que más veces aparece en un archivo de texto.
 # Se aconseja utilizar un diccionario de palabras para resolver el problema.
+
 
 def palabra_mas_frecuente(nombre_archivo_palabras: str) -> str:
     with open(nombre_archivo_palabras) as archivo:
-        lineas:list[str] = archivo.readlines()
+        lineas: list[str] = archivo.readlines()
 
         frecuencia_palabras: dict[str, int] = {}
 
@@ -1116,27 +1118,27 @@ def palabra_mas_frecuente(nombre_archivo_palabras: str) -> str:
             if item > frecuencia_maxima:
                 frecuencia_maxima = item
                 palabra_mayor_frecuencia = key
-            
+
     return palabra_mayor_frecuencia
 
 
 # (print("la palabra mas frecuente es", palabra_mas_frecuente("palabras_frecuentes.txt")))
 
 # ------------
-# Ejercicio 22 27/10
+# Ejercicio 22 27/10 - 28 /10 INTERESANTE; tomar notas y consultar con Pablo
+# pasar diccionario de historial_paginas_eliminadas como parametro, 
+# o guardarlo como data en el diccionario de historiales (hacer esta version tambien)
 # ------------
 
 """
-Nos piden desarrollar un navegador web muy simple que debe llevar un registro de los sitios web visitados por los
-usuarios del sistema. El navegador debe permitir al usuario navegar hacia atrás y hacia adelante en la historia de navegación.
-1. Crea un diccionario llamado historiales que almacenará el historial de navegación para cada usuario. Las claves del
-diccionario serán los nombres de usuario y los valores serán pilas.
-2. Implementa una función llamada visitar sitio(historiales, usuario, sitio) que reciba el diccionario de historiales,
-el nombre de usuario y el sitio web visitado. La función debe agregar el sitio web al historial del usuario correspondiente.
-3. Implementa una función llamada navegar atras(historiales, usuario) que permita al usuario navegar hacia atrás en
-la historia de navegación. Esto implica sacar el sitio web más reciente del historial del usuario.
-4. Implementa una función llamada navegar adelante(historiales, usuario) que permita al usuario navegar hacia ade-
-lante en la historia de navegación. Esto implica volver a agregar el sitio web previamente sacado.
+Nos piden desarrollar un navegador web muy simple que debe llevar un registro de los sitios web visitados por los usuarios del sistema. El navegador debe permitir al usuario navegar hacia atrás y hacia adelante en la historia de navegación.
+1. Crea un diccionario llamado historiales que almacenará el historial de navegación para cada usuario. Las claves del diccionario serán los nombres de usuario y los valores serán pilas.
+2. Implementa una función llamada visitar sitio(historiales, usuario, sitio) que reciba el diccionario de historiales el nombre de usuario y el sitio web visitado. La función debe agregar el sitio web al historial del usuario correspondiente.
+3. Implementa una función llamada navegar atras(historiales, usuario) que permita al usuario navegar hacia atrás en la historia de navegación. Esto implica sacar el sitio web más reciente del historial del usuario.
+4. Implementa una función llamada navegar adelante(historiales, usuario) que permita al usuario navegar hacia adelante en la historia de navegación. Esto implica volver a agregar el sitio web previamente sacado.
+
+# Mapi: para hacer esto o tengo que pasar un diccionario de historiales de sitios borrados por parametro o tengo que guardar los borrados en el diccionario de historiales
+
 Ejemplo de uso:
 historiales = {}
 visitar_sitio(historiales, "Usuario1", "google.com")
@@ -1145,3 +1147,115 @@ navegar_atras(historiales, "Usuario1")
 visitar_sitio(historiales, "Usuario2", "youtube.com")
 navegar_adelante(historiales, "Usuario1")
 """
+
+# 1. OK 27/10
+historiales: dict[str, Pila] = {}
+historiales_sitios_borrados: dict[str, Pila] = {}
+
+
+def actualizar_diccionario_historiales(
+    historiales: dict[str, Pila], usuario: str, sitio: str
+) -> None:
+    if usuario not in historiales.keys():
+        pila: Pila = Pila()
+        pila.put(sitio)
+        historiales[usuario] = pila
+    else:
+        historiales[usuario].put(sitio)
+
+
+# 2. OK 27/10
+def visitar_sitio(historiales: dict[str, Pila], usuario: str, sitio: str) -> None:
+    """
+    Args:
+    historiales: diccionario de historiales con keys de tipo string y valores de tipo pila
+    usuario: nombre de usuario
+    sitio: sitio web visitado
+
+    Funcionalidad: agregar el sitio web al historial del usuario correspondiente
+    """
+    actualizar_diccionario_historiales(historiales, usuario, sitio)
+
+
+def navegar_atras(historiales: dict[str, Pila], historiales_sitios_borrados: dict[str, Pila], usuario: str) -> None:
+    """
+    """   
+
+    if usuario in historiales.keys():
+        ultimo_sitio = historiales[usuario].get()
+        actualizar_diccionario_historiales(
+            historiales_sitios_borrados, usuario, ultimo_sitio
+        )
+        print("Se borro el sitio", ultimo_sitio, "del usuario", usuario)
+    
+
+
+# def obtener_sitios_borrados() -> dict[str, Pila]:
+#     navegar_atras()
+
+def navegar_adelante (historiales: dict[str, Pila], historiales_sitios_borrados: dict[str, Pila], usuario: str) -> None:
+    # Buscar el ultimo sitio de historiales borrados, y agregarlo a la pila de historiales
+    if usuario in historiales_sitios_borrados.keys():
+        ultimo_sitio = historiales_sitios_borrados[usuario].get()
+        historiales[usuario].put(ultimo_sitio)
+
+
+def imprimir_historiales( historiales: dict[str, Pila], es_eliminado: bool = False) -> None:
+    """
+    Args:
+    historiales: dict[str, Pila]
+    es_eliminado: bool
+    -> Indica el tipo de historial, si es historial comun o historial de paginas eliminadas;
+    Por defecto es False, debe explicitarse True cuando es un historial de paginas eliminadas
+    """
+    if es_eliminado:
+        print("historiales de paginas eliminadas")
+    else:
+        print("historiales de paginas")
+    for usuario, pila in historiales.items():
+        print("historial", usuario, ":", pila.queue)
+    print("\n")
+
+
+
+# Agregar sitios y chequear datos guardados
+imprimir_historiales(historiales)
+visitar_sitio(historiales, "Usuario1", "google.com")
+imprimir_historiales(historiales)
+visitar_sitio(historiales, "Usuario1", "facebook.com")
+imprimir_historiales(historiales)
+visitar_sitio(historiales, "Usuario2", "google.com")
+imprimir_historiales(historiales)
+visitar_sitio(historiales, "Usuario2", "youtube.com")
+imprimir_historiales(historiales)
+
+# Borrar sitios y chequear datos guardados
+print("testearndo navegar atras")
+navegar_atras(historiales, historiales_sitios_borrados, "Usuario1")
+imprimir_historiales(historiales)
+imprimir_historiales(historiales_sitios_borrados, True)
+navegar_atras(historiales, historiales_sitios_borrados, "Usuario2")
+imprimir_historiales(historiales)
+imprimir_historiales(historiales_sitios_borrados, True)
+navegar_atras(historiales, historiales_sitios_borrados, "Usuario2")
+imprimir_historiales(historiales)
+imprimir_historiales(historiales_sitios_borrados, True)
+
+# Agregar sitios borrados y chequear datos guardados
+print("testeando navegar adelante")
+imprimir_historiales(historiales)
+imprimir_historiales(historiales_sitios_borrados, True)
+navegar_adelante(historiales, historiales_sitios_borrados, "Usuario1")
+imprimir_historiales(historiales)
+imprimir_historiales(historiales_sitios_borrados, True)
+
+navegar_adelante(historiales, historiales_sitios_borrados, "Usuario2")
+imprimir_historiales(historiales)
+imprimir_historiales(historiales_sitios_borrados, True)
+
+navegar_adelante(historiales, historiales_sitios_borrados, "Usuario2")
+imprimir_historiales(historiales)
+imprimir_historiales(historiales_sitios_borrados, True)
+
+# navegar_atras(historiales, historiales_sitios_borrados, "Usuario1")
+# imprimir_historiales(historiales)
